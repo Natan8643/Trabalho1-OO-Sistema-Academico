@@ -6,13 +6,18 @@ public class App {
 
     public static void main(String[] args) throws Exception {
         System.out.println("\n---------------------------------------");
-        System.out.println("Olá usuário! O que gostaria de fazer?");
+        System.out.println("Olá usuário!");
         System.out.println("---------------------------------------");
         menuInicial();
     }
 
-    public static void menuInicial() {
+    public static void encerrarPrograma() {
+        System.out.println("\n---------------------------------------\nEncerrando o programa!\n---------------------------------------\n");
+        System.exit(0);
+    }
 
+    public static void menuInicial() {
+        System.out.println("\n---------------------------------------\nVocê está no Menu Inicial.\n---------------------------------------\n");
         Scanner sc = new Scanner(System.in);
         int opçao = 0;
         do {
@@ -32,8 +37,7 @@ public class App {
                         System.out.println("---------------------------------------\nVocê escolheu a opção Modo Acompanhamento.\n---------------------------------------\n");
                         break;
                     case 4:
-                        System.out.println("---------------------------------------\nEncerrando o programa!\n---------------------------------------\n");
-                        System.exit(0);
+                        encerrarPrograma();
                     default:
                         System.out.println("---------------------------------------\nEssa opçãp não existe! Tente novamente.\n---------------------------------------\n");
                         break;
@@ -61,38 +65,67 @@ public class App {
                 //chamar a função aluno especial
                 alunoEspecial();
                 break;
-            } 
-            
-            else if (resposta.equalsIgnoreCase("Nao")) {
+            } else if (resposta.equalsIgnoreCase("Nao")) {
                 //chamar a função aluno normal
                 alunoNormal();
                 break;
-            } 
-            
-            else {
+            } else {
                 System.out.println("---------------------------------------\nEntrada inválida! Por favor, digite uma das opções.\n---------------------------------------\n");
             }
 
-        } while (true);       
-    }
-
-    public static void alunoNormal(){
-        Scanner sc = new Scanner(System.in);
-        int opçao = 0;
-        
-        System.out.println("\n---------------------------------------\nVocê está na aba Aluno Normal\n---------------------------------------\n");
-        System.out.println("O que gostaria de fazer?\n\nDigite o número de acordo com sua escolha:\n\n1 - Cadastrar/Editar um aluno\n2 - Listar os alunos cadastrados\n3 - Matricular aluno\n4 - Trancar Disciplina/Semestre\n5 - Voltar para o Menu Aluno\n6 - Voltar para o Menu Inicial\n");
-
-        do { 
-            
-        } while (opçao < 1 || opçao > 6);
+        } while (true);
 
         sc.close();
-        
     }
 
-    public static void alunoEspecial(){
+    public static void alunoNormal() {
+        Scanner sc = new Scanner(System.in);
+        int opçao = 0;
+
+        System.out.println("\n---------------------------------------\nVocê está na aba Aluno Normal\n---------------------------------------\n");
+
+        do {
+            try {
+                System.out.println("O que gostaria de fazer?\n\nDigite o número de acordo com sua escolha:\n\n1 - Cadastrar/Editar um aluno\n2 - Listar os alunos cadastrados\n3 - Matricular aluno\n4 - Trancar Disciplina/Semestre\n5 - Voltar para o Menu Aluno\n6 - Voltar para o Menu Inicial\n7 - Encerrar o programa\n");
+                opçao = sc.nextInt();
+
+                switch (opçao) {
+                    case 1:
+                        //chamar funçao cadastrar/editar
+                        break;
+                    case 2:
+                        //chamar função listar/editar
+                        break;
+                    case 3:
+                        //chamar funçao matricular
+                        break;
+                    case 4:
+                        //chamar funçao trancar disciplina/semestre
+                        break;
+                    case 5:
+                        menuAluno();
+                        break;
+                    case 6:
+                        menuInicial();
+                        break;
+                    case 7:
+                        encerrarPrograma();
+                        break;
+                    default:
+                        System.out.println("---------------------------------------\nEntrada inválida! Por favor, digite um número.\n---------------------------------------\n");
+                        sc.nextLine();
+                }
+
+            } catch (InputMismatchException e) {
+            }
+
+        } while (opçao < 1 || opçao > 7);
+
+        sc.close();
+
+    }
+
+    public static void alunoEspecial() {
 
     }
 }
-
