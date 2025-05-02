@@ -43,9 +43,9 @@ public class App {
                 sc.nextLine();
             }
 
-        } while (true);
+        } while (opçao < 1 || opçao > 4);
 
-        //sc.close();
+        sc.close();
     }
 
     public static void menuAluno() {
@@ -77,9 +77,17 @@ public class App {
     }
 
     public static void alunoNormal(){
+        Scanner sc = new Scanner(System.in);
+        int opçao = 0;
+        
         System.out.println("\n---------------------------------------\nVocê está na aba Aluno Normal\n---------------------------------------\n");
         System.out.println("O que gostaria de fazer?\n\nDigite o número de acordo com sua escolha:\n\n1 - Cadastrar/Editar um aluno\n2 - Listar os alunos cadastrados\n3 - Matricular aluno\n4 - Trancar Disciplina/Semestre\n5 - Voltar para o Menu Aluno\n6 - Voltar para o Menu Inicial\n");
 
+        do { 
+            
+        } while (opçao < 1 || opçao > 6);
+
+        sc.close();
         
     }
 
