@@ -23,7 +23,6 @@ public class App {
                 System.out.print("\n");
                 switch (opçao) {
                     case 1:
-                        System.out.println("---------------------------------------\nVocê escolheu a opção Modo Aluno.\n---------------------------------------\n");
                         menuAluno();
                         break;
                     case 2:
@@ -44,12 +43,13 @@ public class App {
                 sc.nextLine();
             }
 
-        } while (opçao < 1 || opçao > 3);
+        } while (true);
 
-        sc.close();
+        //sc.close();
     }
 
     public static void menuAluno() {
+        System.out.println("---------------------------------------\nVocê está no Menu Aluno.\n---------------------------------------\n");
         Scanner sc = new Scanner(System.in);
         String resposta;
 
@@ -59,10 +59,13 @@ public class App {
 
             if (resposta.equalsIgnoreCase("Sim")) {
                 //chamar a função aluno especial
+                alunoEspecial();
                 break;
             } 
             
             else if (resposta.equalsIgnoreCase("Nao")) {
+                //chamar a função aluno normal
+                alunoNormal();
                 break;
             } 
             
@@ -70,9 +73,18 @@ public class App {
                 System.out.println("---------------------------------------\nEntrada inválida! Por favor, digite uma das opções.\n---------------------------------------\n");
             }
 
-        } while (true);
-
-       
+        } while (true);       
     }
 
+    public static void alunoNormal(){
+        System.out.println("\n---------------------------------------\nVocê está na aba Aluno Normal\n---------------------------------------\n");
+        System.out.println("O que gostaria de fazer?\n\nDigite o número de acordo com sua escolha:\n\n1 - Cadastrar/Editar um aluno\n2 - Listar os alunos cadastrados\n3 - Matricular aluno\n4 - Trancar Disciplina/Semestre\n5 - Voltar para o Menu Aluno\n6 - Voltar para o Menu Inicial\n");
+
+        
+    }
+
+    public static void alunoEspecial(){
+
+    }
 }
+
