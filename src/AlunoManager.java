@@ -1,6 +1,8 @@
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,22 +10,24 @@ import java.util.List;
 import java.util.Scanner;
 
 public class AlunoManager {
-
+    
     private List<Aluno> alunos = new ArrayList<>();
     private Menu menu;
+    private final String nomeArquivo = "data/alunos.csv";
 
     public void setMenu(Menu menu){
         this.menu = menu;
     }
 
     public void cadastrarAluno() {
+        System.out.println();
         try (Scanner sc = new Scanner(System.in)) {
             System.out.println("Digite o nome do aluno:");
             String nome = sc.nextLine();
-            System.out.println("Digite a matrícula:");
+            System.out.println("\nDigite a matrícula:");
             Integer matricula = sc.nextInt();
             sc.nextLine();
-            System.out.println("Digite o curso:");
+            System.out.println("\nDigite o curso:");
             String curso = sc.nextLine();
 
             Aluno aluno = new Aluno(nome, matricula, curso, false, false);
@@ -35,7 +39,6 @@ public class AlunoManager {
     }
 
     private void salvarAluno(Aluno aluno) {
-        String nomeArquivo = "data/alunos.csv";
         File arquivo = new File(nomeArquivo);
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(arquivo, true))) {
@@ -50,10 +53,31 @@ public class AlunoManager {
                     + aluno.getCursoTrancado());
                     writer.newLine();
 
-                    System.out.println("Aluno salvo no arquivo: " + nomeArquivo);
+                    System.out.println("\nAluno cadastrado e salvo no arquivo: " + nomeArquivo);
 
         } catch (IOException e) {
             System.out.println("Erro ao salvar o aluno no arquivo: " + e.getMessage());
         }
+    }
+    
+    public void listarAlunos() {
+        File arquivo = new File(nomeArquivo);
+
+        if (!arquivo.exists()) {
+            System.out.println("Nenhum aluno cadastrado ainda.");
+            menu.menuAluno();
+        }
+
+        System.out.println("\nLista de Alunos Cadastrados:\n");
+        try (BufferedReader reader = new BufferedReader(new FileReader(arquivo))) {
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+                System.out.println(linha + "\n");
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao ler o arquivo: " + e.getMessage());
+        }
+
+        menu.menuAluno();
     }
 }
