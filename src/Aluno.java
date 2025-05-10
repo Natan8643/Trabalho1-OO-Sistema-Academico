@@ -1,5 +1,4 @@
 
-import java.util.Scanner;
 
 public class Aluno {
     private String nome;
@@ -63,12 +62,6 @@ public class Aluno {
 
     public void setSemestreTrancado(Boolean semestreTrancado){
         this.semestreTrancado = semestreTrancado;
-    }
-
-    public void cadastrarAluno(){
-        try(Scanner sc = new Scanner(System.in)) {
-            System.out.println("Digite o nome do aluno:");
-        }  
     }
 
     @Override
