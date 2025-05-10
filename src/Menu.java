@@ -1,14 +1,23 @@
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Menu {
+
+    private Aluno aluno = new Aluno();
+    private AlunoManager alunoManager;
+
+    public Menu() {
+        this.alunoManager = new AlunoManager();
+        this.alunoManager.setMenu(this);
+    }
     
-public void encerrarPrograma() {
+    public void encerrarPrograma() {
         System.out.println("\n---------------------------------------\nEncerrando o programa!\n---------------------------------------\n");
         System.exit(0);
     }
 
-    public void  menuInicial() {
+    public void menuInicial() {
         System.out.println("\n---------------------------------------\nVocê está no Menu Inicial.\n---------------------------------------\n");
         try (Scanner sc = new Scanner(System.in)) {
             int opçao = 0;
@@ -38,7 +47,7 @@ public void encerrarPrograma() {
                     System.out.println("---------------------------------------\nEntrada inválida! Por favor, digite um número.\n---------------------------------------\n");
                     sc.nextLine();
                 }
-                
+
             } while (opçao < 1 || opçao > 4);
         }
     }
@@ -46,69 +55,46 @@ public void encerrarPrograma() {
     public void menuAluno() {
         System.out.println("---------------------------------------\nVocê está no Menu Aluno.\n---------------------------------------\n");
         try (Scanner sc = new Scanner(System.in)) {
-            String resposta;
-            
-            do {
-                System.out.println("Você deseja fazer alguma operação com algum aluno especial?\n\nDigite \"Sim\" ou \"Nao\" (sem acento).\n");
-                resposta = sc.nextLine();
-                
-                if (resposta.equalsIgnoreCase("Sim")) {
-                    //chamar a função aluno especial
-                    alunoEspecial();
-                    break;
-                } else if (resposta.equalsIgnoreCase("Nao")) {
-                    //chamar a função aluno normal
-                    alunoNormal();
-                    break;
-                } else {
-                    System.out.println("---------------------------------------\nEntrada inválida! Por favor, digite uma das opções.\n---------------------------------------\n");
-                }
-                
-            } while (true);
-        }
-    }
-
-      public void alunoNormal() {
-        try (Scanner sc = new Scanner(System.in)) {
             int opçao = 0;
-            
-            System.out.println("\n---------------------------------------\nVocê está na aba Aluno Normal\n---------------------------------------\n");
-            
             do {
                 try {
-                    System.out.println("O que gostaria de fazer?\n\nDigite o número de acordo com sua escolha:\n\n1 - Cadastrar/Editar um aluno\n2 - Listar os alunos cadastrados\n3 - Matricular aluno em alguma disciplina\n4 - Trancar Disciplina/Semestre\n5 - Voltar para o Menu Aluno\n6 - Voltar para o Menu Inicial\n7 - Encerrar o programa\n");
+                    System.out.println("O que gostaria de fazer?\n\nDigite o número de acordo com sua escolha:\n\n1 - Cadastrar/Editar um aluno\n2 - Editar aluno\n3 - Listar alunos\n4 - Matricular aluno em alguma disciplina\n5 - Trancar disciplina/semestre/curso\n6 - Voltar para o Menu Inicial\n7 - Encerrar o programa\n");
                     opçao = sc.nextInt();
-                    
+                    System.out.print("\n");
+
                     switch (opçao) {
                         case 1 -> {
                             //chamar funçao cadastrar/editar aluno
-                            
-                            
+                            alunoManager.cadastrarAluno();
                         }
                         case 2 -> {
-                            //chamar função listar/editar
+                            //chamar função editar aluno
                         }
                         case 3 -> {
-                            //chamar funçao matricular na discipllina
+                            //chamar funçao listar aluno
                         }
                         case 4 -> {
-                            //chamar funçao trancar disciplina/semestre
+                            //chamar funçao matricular na disciplina
                         }
-                        case 5 -> menuAluno();
-                        case 6 -> menuInicial();
-                        case 7 -> encerrarPrograma();
+                        case 5 -> {
+                            // chamar funçao trancamento
+                        }
+                        case 6 ->
+                            menuInicial();
+                        case 7 ->
+                            encerrarPrograma();
                         default -> {
                             System.out.println("---------------------------------------\nEntrada inválida! Por favor, digite um número.\n---------------------------------------\n");
                             sc.nextLine();
                         }
                     }
-                                        
+
                 } catch (InputMismatchException e) {
                 }
-                
-            } while (opçao < 1 || opçao > 7);
-        }
 
+            } while (opçao < 1 || opçao > 7);
+
+        }
     }
 
     public static void alunoEspecial() {
