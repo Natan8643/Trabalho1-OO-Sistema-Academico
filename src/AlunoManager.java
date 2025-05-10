@@ -28,7 +28,10 @@ public class AlunoManager {
             System.out.println("\nDigite a matrícula:");
             Integer matricula = sc.nextInt();
             sc.nextLine();
-            verificarMatricula(matricula);
+            if (verificarMatricula(matricula)) {
+                System.out.println("\nEssa matrícula já existe.\n");
+                menu.menuAluno();
+            }
             System.out.println("\nDigite o curso:");
             String curso = sc.nextLine();
 
@@ -84,25 +87,26 @@ public class AlunoManager {
         menu.menuAluno();
     }
 
-    private void verificarMatricula(int matricula) {
+    private boolean verificarMatricula(int matricula) {
+        if (!arquivo.exists()) {
+            return false;
+        }
         try (BufferedReader reader = new BufferedReader(new FileReader(arquivo))) {
             String linha;
-
             while ((linha = reader.readLine()) != null) {
                 String[] dados = linha.split(",");
-                if(dados.length > 1) {
+                if (dados.length > 1) {
                     try {
                         int matriculaExistente = Integer.parseInt(dados[1].trim());
                         if (matriculaExistente == matricula) {
-                        System.out.println("\nEssa matrícula já existe\n");
-                        menu.menuAluno();
+                            return true;
                         }
                     } catch (NumberFormatException e) {
                     }
                 }
             }
-        } catch (IOException e) {
-            System.out.println("Erro ao verificar a matrícula " + e.getMessage());
+        } catch (Exception e) {
         }
+        return false;
     }
 }
