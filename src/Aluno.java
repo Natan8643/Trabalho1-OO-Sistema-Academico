@@ -1,12 +1,28 @@
+
+import java.util.Scanner;
+
 public class Aluno {
     private String nome;
     private Integer matricula;
     private String curso;
+    private Boolean cursoTrancado;
+    private Boolean semestreTrancado;
 
     public Aluno(){
         this.nome = "";
         this.matricula = 0;
         this.curso = "";
+        this.cursoTrancado = false;
+        this.semestreTrancado = false;
+
+    }
+
+    public Aluno(String nome, Integer matricula, String curso, Boolean cursoTrancado, Boolean semestreTrancado){
+        this.nome = nome;
+        this.matricula = matricula;
+        this.curso = curso;
+        this.cursoTrancado = cursoTrancado;
+        this.semestreTrancado = semestreTrancado;
     }
 
     public String getNome(){
@@ -21,7 +37,7 @@ public class Aluno {
         return matricula;
     }
 
-    public void setMatricula(int matricula){
+    public void setMatricula(Integer matricula){
         this.matricula = matricula;
     }
 
@@ -32,6 +48,34 @@ public class Aluno {
     public void setCurso(String curso){
         this.curso = curso;
     }
+
+    public Boolean getCursoTrancado(){
+        return cursoTrancado;
+    }
+
+    public void setCursoTrancado(Boolean cursoTrancado){
+        this.cursoTrancado = cursoTrancado;
+    }
+
+    public Boolean getSemetreTrancado(){
+        return semestreTrancado;
+    }
+
+    public void setSemestreTrancado(Boolean semestreTrancado){
+        this.semestreTrancado = semestreTrancado;
+    }
+
+    public void cadastrarAluno(){
+        try(Scanner sc = new Scanner(System.in)) {
+            System.out.println("Digite o nome do aluno:");
+        }  
+    }
+
+    @Override
+    public String toString() {
+        return "Nome: " + nome + ", Matricula: " + matricula + ", Curso: " + curso + ", Semestre trancado: " + semestreTrancado;
+    }
+    
 }
 
 
