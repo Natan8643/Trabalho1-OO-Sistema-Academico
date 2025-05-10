@@ -10,6 +10,11 @@ import java.util.Scanner;
 public class AlunoManager {
 
     private List<Aluno> alunos = new ArrayList<>();
+    private Menu menu;
+
+    public void setMenu(Menu menu){
+        this.menu = menu;
+    }
 
     public void cadastrarAluno() {
         try (Scanner sc = new Scanner(System.in)) {
@@ -25,6 +30,7 @@ public class AlunoManager {
             alunos.add(aluno);
 
             salvarAluno(aluno);
+            menu.menuAluno();
         }
     }
 
@@ -35,11 +41,12 @@ public class AlunoManager {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(arquivo, true))) {
             if (arquivo.length() == 0) {
                 writer.write("Nome,Matrícula,Curso,Semestre trancado,Curso trancado");
+                writer.newLine();
             }
             writer.write(aluno.getNome() + ","
                     + aluno.getMatricula() + ","
                     + aluno.getCurso() + ","
-                    + aluno.getSemetreTrancado() + ","
+                    + aluno.getSemestreTrancado() + ","
                     + aluno.getCursoTrancado());
                     writer.newLine();
 
