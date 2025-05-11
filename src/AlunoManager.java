@@ -76,7 +76,7 @@ public class AlunoManager {
                 alunoParaEditar.setCursoTrancado(sc.nextBoolean());
 
                 salvarDados(alunos); // Salva os dados atualizados
-                System.out.println("Aluno editado com sucesso!");
+                System.out.println("\nAluno editado com sucesso!\n");
             } else {
                 System.out.println("Matrícula não encontrada.");
             }
@@ -89,8 +89,8 @@ public class AlunoManager {
             menu.menuAluno();
         }
 
-        System.out.println("\nLista de Alunos Cadastrados (Formato CSV):\n");
-        System.out.println("Nome,Matrícula,Curso,Semestre trancado,Curso trancado"); // Cabeçalho
+        System.out.println("\nLista de Alunos Cadastrados:\n");
+        System.out.println("Nome,Matrícula,Curso,Semestre trancado,Curso trancado\n"); // Cabeçalho
 
         for (Aluno aluno : alunos) {
             System.out.println(aluno.getNome() + ","
@@ -99,6 +99,7 @@ public class AlunoManager {
                     + aluno.getSemestreTrancado() + ","
                     + aluno.getCursoTrancado() + "\n");
         }
+        menu.menuAluno();
     }
 
     private boolean verificarMatricula(int matricula) {
@@ -126,7 +127,6 @@ public class AlunoManager {
                 writer.newLine();
             }
 
-            System.out.println("Dados salvos no arquivo com sucesso.");
         } catch (IOException e) {
             System.out.println("Erro ao salvar os dados no arquivo: " + e.getMessage());
         }
