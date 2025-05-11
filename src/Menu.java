@@ -14,6 +14,7 @@ public class Menu {
     
     public void encerrarPrograma() {
         System.out.println("\n---------------------------------------\nEncerrando o programa!\n---------------------------------------\n");
+        alunoManager.salvarDados(alunoManager.getListaAlunos());
         System.exit(0);
     }
 
@@ -58,9 +59,9 @@ public class Menu {
             int opçao = 0;
             do {
                 try {
-                    System.out.println("O que gostaria de fazer?\n\nDigite o número de acordo com sua escolha:\n\n1 - Cadastrar/Editar um aluno\n2 - Editar aluno\n3 - Listar alunos\n4 - Matricular aluno em alguma disciplina\n5 - Trancar disciplina/semestre/curso\n6 - Voltar para o Menu Inicial\n7 - Encerrar o programa\n");
+                    System.out.println("O que gostaria de fazer?\n\nDigite o número de acordo com sua escolha:\n\n1 - Cadastrar um aluno\n2 - Editar aluno\n3 - Listar alunos\n4 - Matricular aluno em alguma disciplina\n5 - Trancar disciplina/semestre/curso\n6 - Voltar para o Menu Inicial\n7 - Encerrar o programa\n");
                     opçao = sc.nextInt();
-                    System.out.print("\n");
+                    
 
                     switch (opçao) {
                         case 1 -> {
@@ -69,9 +70,11 @@ public class Menu {
                         }
                         case 2 -> {
                             //chamar função editar aluno
+                            alunoManager.editarAluno();
                         }
                         case 3 -> {
                             //chamar funçao listar aluno
+                            alunoManager.listarAlunos();
                         }
                         case 4 -> {
                             //chamar funçao matricular na disciplina
@@ -97,7 +100,4 @@ public class Menu {
         }
     }
 
-    public static void alunoEspecial() {
-
-    }
 }
