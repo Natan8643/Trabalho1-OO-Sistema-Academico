@@ -56,7 +56,7 @@ public class Aluno {
         this.cursoTrancado = cursoTrancado;
     }
 
-    public Boolean getSemetreTrancado(){
+    public Boolean getSemestreTrancado(){
         return semestreTrancado;
     }
 
@@ -66,7 +66,7 @@ public class Aluno {
 
     @Override
     public String toString() {
-        return "Nome: " + nome + ", Matricula: " + matricula + ", Curso: " + curso + ", Semestre trancado: " + semestreTrancado;
+        return "Nome: " + getNome() + ", Matricula: " + getMatricula() + ", Curso: " + getCurso() + ", Semestre trancado: " + getSemestreTrancado() + ", Curso trancado: " + getCursoTrancado();
     }
     
 }
