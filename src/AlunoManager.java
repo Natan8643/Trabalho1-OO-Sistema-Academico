@@ -20,13 +20,17 @@ public class AlunoManager {
         this.menu = menu;
     }
 
+    public List<Aluno> getListaAlunos() {
+        return alunos;
+    }
+
     public AlunoManager() {
         carregarAlunos(); // Carrega os dados automaticamente ao criar o objeto
     }
 
     public void cadastrarAluno() {
         System.out.println();
-        try (Scanner sc = new Scanner(System.in)) {
+        try (Scanner sc = new Scanner(System.in,"UTF-8")) {
             System.out.println("Digite o nome do aluno:");
             String nome = sc.nextLine();
             System.out.println("\nDigite a matrícula:");
@@ -42,14 +46,10 @@ public class AlunoManager {
             Aluno aluno = new Aluno(nome, matricula, curso, false, false);
             alunos.add(aluno);
 
-            salvarAluno(aluno);
             menu.menuAluno();
         }
     }
 
-    private void salvarAluno(Aluno novoAluno) {
-        salvarDados(alunos);
-    }
 
     public void editarAluno() {
         try (Scanner sc = new Scanner(System.in)) {
@@ -57,29 +57,23 @@ public class AlunoManager {
             Integer matricula = sc.nextInt();
             sc.nextLine();
 
-            Aluno alunoParaEditar = null;
-            for (Aluno aluno : alunos) {
-                if (aluno.getMatricula().equals(matricula)) {
-                    alunoParaEditar = aluno;
-                    break;
-                }
-            }
-
+            Aluno alunoParaEditar = buscarAlunoPorMatricula(matricula);
+            
             if (alunoParaEditar != null) {
                 System.out.println("Digite o novo nome do aluno:");
                 alunoParaEditar.setNome(sc.nextLine());
+                System.out.println("Digite a matrícula do aluno:");
+                alunoParaEditar.setMatricula(sc.nextInt());
+                sc.nextLine();
                 System.out.println("Digite o novo curso do aluno:");
                 alunoParaEditar.setCurso(sc.nextLine());
-                System.out.println("O semestre está trancado? (true/false):");
-                alunoParaEditar.setSemestreTrancado(sc.nextBoolean());
-                System.out.println("O curso está trancado? (true/false):");
-                alunoParaEditar.setCursoTrancado(sc.nextBoolean());
 
                 salvarDados(alunos); // Salva os dados atualizados
                 System.out.println("\nAluno editado com sucesso!\n");
-            } else {
+                menu.menuAluno();
+            } 
                 System.out.println("Matrícula não encontrada.");
-            }
+                menu.menuAluno();
         }
     }
 
@@ -111,7 +105,7 @@ public class AlunoManager {
         return false;
     }
 
-    private void salvarDados(List<Aluno> alunos) {
+    public void salvarDados(List<Aluno> alunos) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(arquivo))) {
             // Escreve o cabeçalho no arquivo
             writer.write("Nome,Matrícula,Curso,Semestre trancado,Curso trancado");
@@ -157,4 +151,42 @@ public class AlunoManager {
             System.out.println("Erro ao carregar os alunos: " + e.getMessage());
         }
     }
+
+    private void trancamento() {
+        try(Scanner sc = new Scanner(System.in)){
+            System.out.println("Digite a matrícula do aluno que deseja realizar a operação");
+            int matricula =  sc.nextInt();
+            sc.nextLine();
+
+            buscarAlunoPorMatricula(matricula);
+
+            System.out.println("\nVocê deseja:\n\n1 - Trancar disciplina\n2 - Trancar semestre\n3 - Trancar curso\n4 - Voltar para o Menu Aluno\n");
+
+            int opçao = sc.nextInt();
+            sc.nextLine();
+            switch (opçao) {
+                case 1 -> {
+
+                }
+                case 2 -> {
+
+                }
+                case 3 -> {
+
+                }
+                case 4 -> {
+                    menu.menuAluno();
+                }
+            }
+
+        }
+    }
+    private Aluno buscarAlunoPorMatricula(int matricula) {
+    for (Aluno aluno : alunos) {
+        if (aluno.getMatricula() == matricula) {
+            return aluno; // Retorna o aluno encontrado
+        }
+    }
+    return null; // Retorna null se o aluno não for encontrado
+}
 }
