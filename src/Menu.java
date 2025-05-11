@@ -81,6 +81,7 @@ public class Menu {
                         }
                         case 5 -> {
                             // chamar funçao trancamento
+                            alunoManager.trancamento();
                         }
                         case 6 ->
                             menuInicial();
