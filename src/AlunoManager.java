@@ -30,7 +30,7 @@ public class AlunoManager {
 
     public void cadastrarAluno() {
         System.out.println();
-        try (Scanner sc = new Scanner(System.in,"UTF-8")) {
+        try (Scanner sc = new Scanner(System.in)) {
             System.out.println("Digite o nome do aluno:");
             String nome = sc.nextLine();
             System.out.println("\nDigite a matrícula:");
@@ -50,7 +50,6 @@ public class AlunoManager {
         }
     }
 
-
     public void editarAluno() {
         try (Scanner sc = new Scanner(System.in)) {
             System.out.println("\nDigite a matrícula do aluno que deseja editar:");
@@ -58,7 +57,7 @@ public class AlunoManager {
             sc.nextLine();
 
             Aluno alunoParaEditar = buscarAlunoPorMatricula(matricula);
-            
+
             if (alunoParaEditar != null) {
                 System.out.println("Digite o novo nome do aluno:");
                 alunoParaEditar.setNome(sc.nextLine());
@@ -68,12 +67,11 @@ public class AlunoManager {
                 System.out.println("Digite o novo curso do aluno:");
                 alunoParaEditar.setCurso(sc.nextLine());
 
-                salvarDados(alunos); // Salva os dados atualizados
                 System.out.println("\nAluno editado com sucesso!\n");
                 menu.menuAluno();
-            } 
-                System.out.println("Matrícula não encontrada.");
-                menu.menuAluno();
+            }
+            System.out.println("Matrícula não encontrada.");
+            menu.menuAluno();
         }
     }
 
@@ -152,28 +150,68 @@ public class AlunoManager {
         }
     }
 
-    private void trancamento() {
-        try(Scanner sc = new Scanner(System.in)){
-            System.out.println("Digite a matrícula do aluno que deseja realizar a operação");
-            int matricula =  sc.nextInt();
+    public void trancamento() {
+        try (Scanner sc = new Scanner(System.in)) {
+            System.out.println("\nDigite a matrícula do aluno que deseja realizar a operação\n");
+            int matricula = sc.nextInt();
             sc.nextLine();
 
-            buscarAlunoPorMatricula(matricula);
+            Aluno alunoParaEditar = buscarAlunoPorMatricula(matricula);
 
-            System.out.println("\nVocê deseja:\n\n1 - Trancar disciplina\n2 - Trancar semestre\n3 - Trancar curso\n4 - Voltar para o Menu Aluno\n");
+            if (alunoParaEditar == null) {
+                System.out.println("\nMatrícula não encontrada\n");
+                menu.menuAluno();
+                return;
+            }
+
+            System.out.println("\n" + alunoParaEditar.toString());
+
+            System.out.println("\nVocê deseja:\n\n1 - Trancar/destrancar disciplina\n2 - Trancar/destrancar semestre\n3 - Trancar/destrancar curso\n4 - Voltar para o Menu Aluno\n");
 
             int opçao = sc.nextInt();
             sc.nextLine();
             switch (opçao) {
                 case 1 -> {
-
+                    //implementar trancar disciplina
                 }
                 case 2 -> {
+                    if (alunoParaEditar.getSemestreTrancado().equals(false)) {
+                        System.out.println("\nDeseja trancar o semestre do/a " + alunoParaEditar.getNome() + "?\n\nDigite Sim para trancar ou Nao para voltar ao menu.");
+                        String escolha = sc.nextLine();
 
+                        if (escolha.equalsIgnoreCase("sim")) {
+                            alunoParaEditar.setSemestreTrancado(true);
+                        }
+                        menu.menuAluno();
+                    }
+
+                    System.out.println("\nDeseja destrancar o semestre do/a " + alunoParaEditar.getNome() + "?\n\nDigite Sim para destrancar ou Nao para voltar ao menu");
+                    String escolha = sc.nextLine();
+                    if (escolha.equalsIgnoreCase("sim")) {
+                        alunoParaEditar.setSemestreTrancado(false);
+                    }
+                    menu.menuAluno();
                 }
                 case 3 -> {
+                    if (alunoParaEditar.getCursoTrancado().equals(false)) {
+                        System.out.println("\nDeseja trancar o curso do/a " + alunoParaEditar.getNome() + "?\n\nDigite Sim para trancar ou Nao para voltar ao menu.");
+                        String escolha = sc.nextLine();
 
+                        if (escolha.equalsIgnoreCase("sim")) {
+                            alunoParaEditar.setCursoTrancado(true);
+                        }
+                        menu.menuAluno();
+                    }
+
+                    System.out.println("\nDeseja destrancar o curso do/a " + alunoParaEditar.getNome() + "?\n\nDigite Sim para destrancar ou Nao para voltar ao menu");
+
+                    String escolha = sc.nextLine();
+                    if (escolha.equalsIgnoreCase("sim")) {
+                        alunoParaEditar.setCursoTrancado(false);
+                    }
+                    menu.menuAluno();
                 }
+
                 case 4 -> {
                     menu.menuAluno();
                 }
@@ -181,12 +219,13 @@ public class AlunoManager {
 
         }
     }
+
     private Aluno buscarAlunoPorMatricula(int matricula) {
-    for (Aluno aluno : alunos) {
-        if (aluno.getMatricula() == matricula) {
-            return aluno; // Retorna o aluno encontrado
+        for (Aluno aluno : alunos) {
+            if (aluno.getMatricula() == matricula) {
+                return aluno; // Retorna o aluno encontrado
+            }
         }
+        return null; // Retorna null se o aluno não for encontrado
     }
-    return null; // Retorna null se o aluno não for encontrado
-}
 }
