@@ -50,6 +50,7 @@ public class AlunoManager {
                 writer.write("Nome,Matrícula,Curso,Semestre trancado,Curso trancado");
                 writer.newLine();
             }
+            
             writer.write(aluno.getNome() + ","
                     + aluno.getMatricula() + ","
                     + aluno.getCurso() + ","
@@ -65,7 +66,18 @@ public class AlunoManager {
     }
 
     public void editarAluno() {
+        try(Scanner sc = new Scanner(System.in)) {
+            System.out.println("\nDigite a matrícula do aluno que deseja editar\n");
+            Integer matricula = sc.nextInt();
+            sc.nextLine();
+            if(verificarMatricula(matricula)) {
 
+            }
+
+            System.out.println("\nMatrícula não encontrada\n");
+            menu.menuAluno();
+
+        }
     }
 
     public void listarAlunos() {
