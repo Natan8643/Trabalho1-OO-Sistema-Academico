@@ -32,20 +32,40 @@ public class AlunoManager {
     public void cadastrarAluno() {
         System.out.println();
         try (Scanner sc = new Scanner(System.in)) {
-            System.out.println("Digite o nome do aluno:");
+            System.out.println("Digite o nome do aluno:\n");
             String nome = sc.nextLine();
-            System.out.println("\nDigite a matrícula:");
+            System.out.println("\nDigite a matrícula:\n");
             Integer matricula = sc.nextInt();
             sc.nextLine();
-            if (buscarAlunoPorMatricula(matricula).getMatricula().equals(matricula)) {
+            if (buscarAlunoPorMatricula(matricula) != null) {
                 System.out.println("\nEssa matrícula já existe.\n");
                 menu.menuAluno();
             }
-            System.out.println("\nDigite o curso:");
+            System.out.println("\nDigite o curso:\n");
             String curso = sc.nextLine();
+            Boolean especial = false;
 
-            Aluno aluno = new Aluno(nome, matricula, curso, false, false);
+            System.out.println("\nO aluno é especial?\n");
+            String resposta;
+            do {
+                resposta = sc.nextLine();
+
+                if (resposta.equalsIgnoreCase("sim")) {
+                    especial = true;
+                    break;
+                } else if (resposta.equalsIgnoreCase("nao")) {
+                    especial = false;
+                    break;
+                }
+
+                System.out.println("\nEntrada inválida. Por favor, digite Sim ou Nao\n");
+
+            } while (!resposta.equalsIgnoreCase("sim") && !resposta.equalsIgnoreCase("nao"));
+
+            Aluno aluno = new Aluno(nome, matricula, curso, especial, false, false);
             alunos.add(aluno);
+
+            System.out.println("\nAluno cadastrado\n");
 
             menu.menuAluno();
         }
@@ -67,6 +87,22 @@ public class AlunoManager {
                 sc.nextLine();
                 System.out.println("Digite o novo curso do aluno:");
                 alunoParaEditar.setCurso(sc.nextLine());
+                System.out.println("\nO aluno é especial?\n");
+                String resposta;
+                do {
+                    resposta = sc.nextLine();
+
+                    if (resposta.equalsIgnoreCase("sim")) {
+                        alunoParaEditar.setEspecial(true);
+                        break;
+                    } else if (resposta.equalsIgnoreCase("nao")) {
+                        alunoParaEditar.setEspecial(false);
+                        break;
+                    }
+
+                    System.out.println("\nEntrada inválida. Por favor, digite Sim ou Nao\n");
+
+                } while (!resposta.equalsIgnoreCase("sim") && !resposta.equalsIgnoreCase("nao"));
 
                 System.out.println("\nAluno editado com sucesso!\n");
                 menu.menuAluno();
@@ -84,26 +120,27 @@ public class AlunoManager {
         }
 
         System.out.println("\nLista de Alunos Cadastrados:\n");
-        System.out.println("Nome,Matrícula,Curso,Semestre trancado,Curso trancado\n"); // Cabeçalho
+        System.out.println("Nome,Matrícula,Curso,Especial,Semestre trancado,Curso trancado\n"); // Cabeçalho
 
         for (Aluno aluno : alunos) {
             System.out.println(aluno.getNome() + ","
                     + aluno.getMatricula() + ","
                     + aluno.getCurso() + ","
+                    + aluno.getEspecial() + ","
                     + aluno.getSemestreTrancado() + ","
                     + aluno.getCursoTrancado() + "\n");
         }
         System.out.println("\nClique ENTER para continuar\n");
         Scanner sc = new Scanner(System.in);
         sc.nextLine();
-        
+
         menu.menuAluno();
     }
 
     public void salvarDados(List<Aluno> alunos) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(arquivo))) {
             // Escreve o cabeçalho no arquivo
-            writer.write("Nome,Matrícula,Curso,Semestre trancado,Curso trancado");
+            writer.write("Nome,Matrícula,Curso,Especial,Semestre trancado,Curso trancado");
             writer.newLine();
 
             // Escreve os dados de cada aluno
@@ -111,6 +148,7 @@ public class AlunoManager {
                 writer.write(aluno.getNome() + ","
                         + aluno.getMatricula() + ","
                         + aluno.getCurso() + ","
+                        + aluno.getEspecial() + ","
                         + aluno.getSemestreTrancado() + ","
                         + aluno.getCursoTrancado());
                 writer.newLine();
@@ -135,10 +173,11 @@ public class AlunoManager {
                     String nome = dados[0].trim();
                     int matricula = Integer.parseInt(dados[1].trim());
                     String curso = dados[2].trim();
-                    boolean semestreTrancado = Boolean.parseBoolean(dados[3].trim());
-                    boolean cursoTrancado = Boolean.parseBoolean(dados[4].trim());
+                    boolean especial = Boolean.parseBoolean(dados[3].trim());
+                    boolean semestreTrancado = Boolean.parseBoolean(dados[4].trim());
+                    boolean cursoTrancado = Boolean.parseBoolean(dados[5].trim());
 
-                    Aluno aluno = new Aluno(nome, matricula, curso, semestreTrancado, cursoTrancado);
+                    Aluno aluno = new Aluno(nome, matricula, curso, especial, semestreTrancado, cursoTrancado);
                     alunos.add(aluno); // Adiciona o aluno à lista
                 }
             }
@@ -221,6 +260,7 @@ public class AlunoManager {
     }
 
     private Aluno buscarAlunoPorMatricula(int matricula) {
+        
         for (Aluno aluno : alunos) {
             if (aluno.getMatricula().equals(matricula)) {
                 return aluno; // Retorna o aluno encontrado
@@ -230,8 +270,8 @@ public class AlunoManager {
     }
 
     public void removerAluno() {
-        try(Scanner sc = new Scanner(System.in)) {
-             System.out.println("\nDigite a matrícula do aluno que deseja realizar a operação\n");
+        try (Scanner sc = new Scanner(System.in)) {
+            System.out.println("\nDigite a matrícula do aluno que deseja realizar a operação\n");
             int matricula = sc.nextInt();
             sc.nextLine();
 
@@ -246,14 +286,14 @@ public class AlunoManager {
 
             System.out.println("Deseja remover esse aluno?\n\nDigite Sim para remover e Nao para retornar ao menu.");
             String opcao = sc.nextLine();
-            
+
             if (opcao.equalsIgnoreCase("sim")) {
                 alunos.remove(alunoParaEditar);
                 System.out.println("\nAluno removido com sucesso.\n");
                 menu.menuAluno();
             }
 
-        } catch(InputMismatchException e) {
+        } catch (InputMismatchException e) {
             System.out.println("Entrada inválida. Por favor, insira um número inteiro.");
             menu.menuAluno();
         }
