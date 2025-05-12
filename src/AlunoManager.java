@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -75,6 +76,7 @@ public class AlunoManager {
         }
     }
 
+    @SuppressWarnings("ConvertToTryWithResources")
     public void listarAlunos() {
         if (alunos.isEmpty()) {
             System.out.println("Nenhum aluno cadastrado ainda.");
@@ -91,6 +93,10 @@ public class AlunoManager {
                     + aluno.getSemestreTrancado() + ","
                     + aluno.getCursoTrancado() + "\n");
         }
+        System.out.println("\nClique ENTER para continuar\n");
+        Scanner sc = new Scanner(System.in);
+        sc.nextLine();
+        
         menu.menuAluno();
     }
 
@@ -171,6 +177,7 @@ public class AlunoManager {
 
                         if (escolha.equalsIgnoreCase("sim")) {
                             alunoParaEditar.setSemestreTrancado(true);
+                            System.out.println("\nO semestre foi trancado\n");
                         }
                         menu.menuAluno();
                     }
@@ -179,6 +186,7 @@ public class AlunoManager {
                     String escolha = sc.nextLine();
                     if (escolha.equalsIgnoreCase("sim")) {
                         alunoParaEditar.setSemestreTrancado(false);
+                        System.out.println("\nO semestre foi destrancado\n");
                     }
                     menu.menuAluno();
                 }
@@ -189,6 +197,7 @@ public class AlunoManager {
 
                         if (escolha.equalsIgnoreCase("sim")) {
                             alunoParaEditar.setCursoTrancado(true);
+                            System.out.println("\nO curso foi trancado\n");
                         }
                         menu.menuAluno();
                     }
@@ -198,6 +207,7 @@ public class AlunoManager {
                     String escolha = sc.nextLine();
                     if (escolha.equalsIgnoreCase("sim")) {
                         alunoParaEditar.setCursoTrancado(false);
+                        System.out.println("\nO curso foi trancado\n");
                     }
                     menu.menuAluno();
                 }
@@ -217,5 +227,35 @@ public class AlunoManager {
             }
         }
         return null; // Retorna null se o aluno não for encontrado
+    }
+
+    public void removerAluno() {
+        try(Scanner sc = new Scanner(System.in)) {
+             System.out.println("\nDigite a matrícula do aluno que deseja realizar a operação\n");
+            int matricula = sc.nextInt();
+            sc.nextLine();
+
+            Aluno alunoParaEditar = buscarAlunoPorMatricula(matricula);
+
+            if (alunoParaEditar == null) {
+                System.out.println("\nMatrícula não encontrada\n");
+                menu.menuAluno();
+            }
+
+            System.out.println("\n" + alunoParaEditar.toString());
+
+            System.out.println("Deseja remover esse aluno?\n\nDigite Sim para remover e Nao para retornar ao menu.");
+            String opcao = sc.nextLine();
+            
+            if (opcao.equalsIgnoreCase("sim")) {
+                alunos.remove(alunoParaEditar);
+                System.out.println("\nAluno removido com sucesso.\n");
+                menu.menuAluno();
+            }
+
+        } catch(InputMismatchException e) {
+            System.out.println("Entrada inválida. Por favor, insira um número inteiro.");
+            menu.menuAluno();
+        }
     }
 }
