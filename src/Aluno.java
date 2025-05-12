@@ -6,6 +6,7 @@ public class Aluno {
     private String curso;
     private Boolean cursoTrancado;
     private Boolean semestreTrancado;
+    private Boolean especial;
 
     public Aluno(){
         this.nome = "";
@@ -13,15 +14,17 @@ public class Aluno {
         this.curso = "";
         this.cursoTrancado = false;
         this.semestreTrancado = false;
+        this.especial = false;
 
     }
 
-    public Aluno(String nome, Integer matricula, String curso, Boolean cursoTrancado, Boolean semestreTrancado){
+    public Aluno(String nome, Integer matricula, String curso, Boolean especial, Boolean cursoTrancado, Boolean semestreTrancado){
         this.nome = nome;
         this.matricula = matricula;
         this.curso = curso;
         this.cursoTrancado = cursoTrancado;
         this.semestreTrancado = semestreTrancado;
+        this.especial = especial;
     }
 
     public String getNome(){
@@ -64,9 +67,17 @@ public class Aluno {
         this.semestreTrancado = semestreTrancado;
     }
 
+    public Boolean getEspecial() {
+        return especial;
+    }
+
+    public void setEspecial(Boolean especial) {
+        this.especial = especial;
+    }
+
     @Override
     public String toString() {
-        return "Nome: " + getNome() + ", Matricula: " + getMatricula() + ", Curso: " + getCurso() + ", Semestre trancado: " + getSemestreTrancado() + ", Curso trancado: " + getCursoTrancado();
+        return "Nome: " + getNome() + ", Matricula: " + getMatricula() + ", Curso: " + getCurso() + ", Especial: " + getEspecial() + ", Semestre trancado: " + getSemestreTrancado() + ", Curso trancado: " + getCursoTrancado();
     }
     
 }
