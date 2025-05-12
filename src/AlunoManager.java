@@ -36,7 +36,7 @@ public class AlunoManager {
             System.out.println("\nDigite a matrícula:");
             Integer matricula = sc.nextInt();
             sc.nextLine();
-            if (verificarMatricula(matricula)) {
+            if (buscarAlunoPorMatricula(matricula).getMatricula().equals(matricula)) {
                 System.out.println("\nEssa matrícula já existe.\n");
                 menu.menuAluno();
             }
@@ -92,15 +92,6 @@ public class AlunoManager {
                     + aluno.getCursoTrancado() + "\n");
         }
         menu.menuAluno();
-    }
-
-    private boolean verificarMatricula(int matricula) {
-        for (Aluno aluno : alunos) {
-            if (aluno.getMatricula() == matricula) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public void salvarDados(List<Aluno> alunos) {
@@ -161,7 +152,6 @@ public class AlunoManager {
             if (alunoParaEditar == null) {
                 System.out.println("\nMatrícula não encontrada\n");
                 menu.menuAluno();
-                return;
             }
 
             System.out.println("\n" + alunoParaEditar.toString());
@@ -222,7 +212,7 @@ public class AlunoManager {
 
     private Aluno buscarAlunoPorMatricula(int matricula) {
         for (Aluno aluno : alunos) {
-            if (aluno.getMatricula() == matricula) {
+            if (aluno.getMatricula().equals(matricula)) {
                 return aluno; // Retorna o aluno encontrado
             }
         }
