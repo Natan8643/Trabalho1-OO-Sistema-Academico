@@ -59,7 +59,7 @@ public class Menu {
             int opçao = 0;
             do {
                 try {
-                    System.out.println("O que gostaria de fazer?\n\nDigite o número de acordo com sua escolha:\n\n1 - Cadastrar um aluno\n2 - Editar aluno\n3 - Listar alunos\n4 - Matricular aluno em alguma disciplina\n5 - Trancar disciplina/semestre/curso\n6 - Voltar para o Menu Inicial\n7 - Encerrar o programa\n");
+                    System.out.println("O que gostaria de fazer?\n\nDigite o número de acordo com sua escolha:\n\n1 - Cadastrar um aluno\n2 - Editar aluno\n3 - Listar alunos\n4 - Matricular aluno em alguma disciplina\n5 - Trancar disciplina/semestre/curso\n6 - Remover aluno\n7 - Voltar ao menu inicial\n8 - Encerrar o programa\n");
                     opçao = sc.nextInt();
                     
 
@@ -84,9 +84,10 @@ public class Menu {
                             alunoManager.trancamento();
                         }
                         case 6 ->
-                            menuInicial();
+                            alunoManager.removerAluno();
                         case 7 ->
-                            encerrarPrograma();
+                            menuInicial();
+                        case 8 -> encerrarPrograma();    
                         default -> {
                             System.out.println("---------------------------------------\nEntrada inválida! Por favor, digite um número.\n---------------------------------------\n");
                             sc.nextLine();
