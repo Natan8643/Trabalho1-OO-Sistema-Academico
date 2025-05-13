@@ -170,7 +170,7 @@ public class AlunoManager {
             reader.readLine(); // Ignora o cabeçalho
             while ((linha = reader.readLine()) != null) {
                 String[] dados = linha.split(",");
-                if (dados.length == 5) {
+                if (dados.length == 6) {
                     String nome = dados[0].trim();
                     int matricula = Integer.parseInt(dados[1].trim());
                     String curso = dados[2].trim();
@@ -181,10 +181,6 @@ public class AlunoManager {
                     Aluno aluno = new Aluno(nome, matricula, curso, especial, semestreTrancado, cursoTrancado);
                     alunos.add(aluno); // Adiciona o aluno à lista
 
-                    if (especial) {
-                        AlunoEspecial alunoEspecial = new AlunoEspecial(nome, matricula, curso, especial, semestreTrancado, cursoTrancado);
-                        alunoEsp.add(alunoEspecial);
-                    }
                 }
             }
         } catch (IOException e) {
