@@ -11,7 +11,7 @@ public class Menu {
         this.alunoManager = new AlunoManager();
         this.alunoManager.setMenu(this);
     }
-    
+
     public void encerrarPrograma() {
         System.out.println("\n---------------------------------------\nEncerrando o programa!\n---------------------------------------\n");
         alunoManager.salvarDados(alunoManager.getListaAlunos());
@@ -59,9 +59,8 @@ public class Menu {
             int opçao = 0;
             do {
                 try {
-                    System.out.println("O que gostaria de fazer?\n\nDigite o número de acordo com sua escolha:\n\n1 - Cadastrar um aluno\n2 - Editar aluno\n3 - Listar alunos\n4 - Matricular aluno em alguma disciplina\n5 - Trancar disciplina/semestre/curso\n6 - Remover aluno\n7 - Voltar ao menu inicial\n8 - Encerrar o programa\n");
+                    System.out.println("O que gostaria de fazer?\n\nDigite o número de acordo com sua escolha:\n\n1 - Cadastrar um aluno\n2 - Editar aluno\n3 - Buscar aluno\n4 - Listar alunos\n5 - Matricular aluno em alguma discipçina\n6 - Trancar/Destrancar disciplina/semestre/curso\n7 - Remover aluno\n8 - Voltar para o menu inicial\n9 - Encerrar programa\n");
                     opçao = sc.nextInt();
-                    
 
                     switch (opçao) {
                         case 1 -> {
@@ -74,20 +73,25 @@ public class Menu {
                         }
                         case 3 -> {
                             //chamar funçao listar aluno
-                            alunoManager.listarAlunos();
+                            Aluno alunoAExibir = alunoManager.retornaAluno();
+                            System.out.println("\n" + alunoAExibir.toString() + "\n");
+                            menuAluno();
                         }
                         case 4 -> {
-                            //chamar funçao matricular na disciplina
+                            alunoManager.listarAlunos();
                         }
                         case 5 -> {
-                            // chamar funçao trancamento
-                            alunoManager.trancamento();
+                            //chamar funçao matricular na disciplina
                         }
                         case 6 ->
-                            alunoManager.removerAluno();
+                            // chamar funçao trancamento
+                            alunoManager.trancamento();
                         case 7 ->
+                            alunoManager.removerAluno();
+                        case 8 ->
                             menuInicial();
-                        case 8 -> encerrarPrograma();    
+                        case 9 ->
+                            encerrarPrograma();
                         default -> {
                             System.out.println("---------------------------------------\nEntrada inválida! Por favor, digite um número.\n---------------------------------------\n");
                             sc.nextLine();
