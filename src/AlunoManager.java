@@ -13,6 +13,7 @@ import java.util.Scanner;
 public class AlunoManager {
 
     private List<Aluno> alunos = new ArrayList<>();
+    private List<Aluno> alunoEsp = new ArrayList<>();
     private Menu menu;
     private final String nomeArquivo = "data/alunos.csv";
     private final File arquivo = new File(nomeArquivo);
@@ -65,6 +66,10 @@ public class AlunoManager {
             Aluno aluno = new Aluno(nome, matricula, curso, especial, false, false);
             alunos.add(aluno);
 
+            if (especial) {
+                AlunoEspecial alunoEspecial = new AlunoEspecial(nome, matricula, curso, especial, false, false);
+                alunoEsp.add(alunoEspecial);
+            }
             System.out.println("\nAluno cadastrado\n");
 
             menu.menuAluno();
@@ -73,11 +78,7 @@ public class AlunoManager {
 
     public void editarAluno() {
         try (Scanner sc = new Scanner(System.in)) {
-            System.out.println("\nDigite a matrícula do aluno que deseja editar:");
-            Integer matricula = sc.nextInt();
-            sc.nextLine();
-
-            Aluno alunoParaEditar = buscarAlunoPorMatricula(matricula);
+            Aluno alunoParaEditar = retornaAluno();
 
             if (alunoParaEditar != null) {
                 System.out.println("Digite o novo nome do aluno:");
@@ -179,6 +180,11 @@ public class AlunoManager {
 
                     Aluno aluno = new Aluno(nome, matricula, curso, especial, semestreTrancado, cursoTrancado);
                     alunos.add(aluno); // Adiciona o aluno à lista
+
+                    if (especial) {
+                        AlunoEspecial alunoEspecial = new AlunoEspecial(nome, matricula, curso, especial, semestreTrancado, cursoTrancado);
+                        alunoEsp.add(alunoEspecial);
+                    }
                 }
             }
         } catch (IOException e) {
@@ -187,21 +193,11 @@ public class AlunoManager {
     }
 
     public void trancamento() {
+        Aluno alunoParaEditar = retornaAluno();
+        System.out.println("\n" + alunoParaEditar.toString());
+
+        System.out.println("\nVocê deseja:\n\n1 - Trancar/destrancar disciplina\n2 - Trancar/destrancar semestre\n3 - Trancar/destrancar curso\n4 - Voltar para o Menu Aluno\n");
         try (Scanner sc = new Scanner(System.in)) {
-            System.out.println("\nDigite a matrícula do aluno que deseja realizar a operação\n");
-            int matricula = sc.nextInt();
-            sc.nextLine();
-
-            Aluno alunoParaEditar = buscarAlunoPorMatricula(matricula);
-
-            if (alunoParaEditar == null) {
-                System.out.println("\nMatrícula não encontrada\n");
-                menu.menuAluno();
-            }
-
-            System.out.println("\n" + alunoParaEditar.toString());
-
-            System.out.println("\nVocê deseja:\n\n1 - Trancar/destrancar disciplina\n2 - Trancar/destrancar semestre\n3 - Trancar/destrancar curso\n4 - Voltar para o Menu Aluno\n");
 
             int opçao = sc.nextInt();
             sc.nextLine();
@@ -260,7 +256,7 @@ public class AlunoManager {
     }
 
     private Aluno buscarAlunoPorMatricula(int matricula) {
-        
+
         for (Aluno aluno : alunos) {
             if (aluno.getMatricula().equals(matricula)) {
                 return aluno; // Retorna o aluno encontrado
@@ -271,11 +267,7 @@ public class AlunoManager {
 
     public void removerAluno() {
         try (Scanner sc = new Scanner(System.in)) {
-            System.out.println("\nDigite a matrícula do aluno que deseja realizar a operação\n");
-            int matricula = sc.nextInt();
-            sc.nextLine();
-
-            Aluno alunoParaEditar = buscarAlunoPorMatricula(matricula);
+            Aluno alunoParaEditar = retornaAluno();
 
             if (alunoParaEditar == null) {
                 System.out.println("\nMatrícula não encontrada\n");
@@ -297,5 +289,20 @@ public class AlunoManager {
             System.out.println("Entrada inválida. Por favor, insira um número inteiro.");
             menu.menuAluno();
         }
+    }
+
+    public Aluno retornaAluno() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("\nDigite a matrícula do aluno que deseja realizar a operação\n");
+        int matricula = sc.nextInt();
+        sc.nextLine();
+
+        Aluno alunoParaEditar = buscarAlunoPorMatricula(matricula);
+
+        if (alunoParaEditar == null) {
+            System.out.println("\nMatrícula não encontrada\n");
+            menu.menuAluno();
+        }
+        return alunoParaEditar;
     }
 }
