@@ -46,7 +46,7 @@ public class AlunoManager {
             String curso = sc.nextLine();
             Boolean especial = false;
 
-            System.out.println("\nO aluno é especial?\n");
+            System.out.println("\nO aluno é especial?\n\nDigite Sim ou Nao:\n");
             String resposta;
             do {
                 resposta = sc.nextLine();
