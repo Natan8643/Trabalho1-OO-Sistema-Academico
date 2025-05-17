@@ -21,19 +21,20 @@ public class Menu {
     public void menuInicial() {
         System.out.println("\n---------------------------------------\nVocê está no Menu Inicial.\n---------------------------------------\n");
         try (Scanner sc = new Scanner(System.in)) {
-            int opçao = 0;
+            int opcao = 0;
             do {
                 try {
                     System.out.println("Digite o número de acordo com sua escolha:\n");
                     System.out.println("1 - Modo Aluno\n2 - Modo Disciplina\n3 - Modo Acompanhamento\n4 - Fechar programa\n");
-                    opçao = sc.nextInt();
+                    opcao = sc.nextInt();
+                    sc.nextLine();
                     System.out.print("\n");
-                    switch (opçao) {
+                    switch (opcao) {
                         case 1:
                             menuAluno();
                             break;
                         case 2:
-                            System.out.println("---------------------------------------\nVocê escolheu a opção Modo Disciplina.\n---------------------------------------\n");
+                            menuDisciplina();
                             break;
                         case 3:
                             System.out.println("---------------------------------------\nVocê escolheu a opção Modo Acompanhamento.\n---------------------------------------\n");
@@ -41,28 +42,27 @@ public class Menu {
                         case 4:
                             encerrarPrograma();
                         default:
-                            System.out.println("---------------------------------------\nEssa opçãp não existe! Tente novamente.\n---------------------------------------\n");
+                            System.out.println("---------------------------------------\nEssa opção não existe! Tente novamente.\n---------------------------------------\n");
                             break;
                     }
                 } catch (InputMismatchException e) {
                     System.out.println("---------------------------------------\nEntrada inválida! Por favor, digite um número.\n---------------------------------------\n");
-                    sc.nextLine();
                 }
 
-            } while (opçao < 1 || opçao > 4);
+            } while (opcao < 1 || opcao > 4);
         }
     }
 
     public void menuAluno() {
         System.out.println("---------------------------------------\nVocê está no Menu Aluno.\n---------------------------------------\n");
         try (Scanner sc = new Scanner(System.in)) {
-            int opçao = 0;
+            System.out.println("O que gostaria de fazer?\n\nDigite o número de acordo com sua escolha:\n\n1 - Cadastrar um aluno\n2 - Editar aluno\n3 - Buscar aluno\n4 - Listar alunos\n5 - Matricular aluno em alguma discipçina\n6 - Trancar/Destrancar disciplina/semestre/curso\n7 - Remover aluno\n8 - Voltar para o menu inicial\n9 - Encerrar programa\n");
+            int opcao = 0;
             do {
                 try {
-                    System.out.println("O que gostaria de fazer?\n\nDigite o número de acordo com sua escolha:\n\n1 - Cadastrar um aluno\n2 - Editar aluno\n3 - Buscar aluno\n4 - Listar alunos\n5 - Matricular aluno em alguma discipçina\n6 - Trancar/Destrancar disciplina/semestre/curso\n7 - Remover aluno\n8 - Voltar para o menu inicial\n9 - Encerrar programa\n");
-                    opçao = sc.nextInt();
-
-                    switch (opçao) {
+                    opcao = sc.nextInt();
+                    sc.nextLine();
+                    switch (opcao) {
                         case 1 -> {
                             //chamar funçao cadastrar/editar aluno
                             alunoManager.cadastrarAluno();
@@ -93,17 +93,47 @@ public class Menu {
                         case 9 ->
                             encerrarPrograma();
                         default -> {
-                            System.out.println("---------------------------------------\nEntrada inválida! Por favor, digite um número.\n---------------------------------------\n");
-                            sc.nextLine();
+                            System.out.println("---------------------------------------\nEssa opção não existe! Tente novamente.\n---------------------------------------\n");
                         }
                     }
 
                 } catch (InputMismatchException e) {
+                    System.out.println("---------------------------------------\nEntrada inválida! Por favor, digite um número.\n---------------------------------------\n");
                 }
 
-            } while (opçao < 1 || opçao > 7);
+            } while (opcao < 1 || opcao > 7);
 
         }
+    }
+
+    public void menuDisciplina() {
+        System.out.println("---------------------------------------\nVocê está no Menu Disciplina.\n---------------------------------------\n");
+        try (Scanner sc = new Scanner(System.in)) {
+            int opcao = 0;
+            opcao = sc.nextInt();
+            sc.nextLine();
+            do {
+                try {
+                    switch (opcao) {
+                        case 1 -> {
+                            //chamar funçao cadastrar disciplina
+                        }
+                        case 2 -> {
+                            //criar turma
+                        }
+
+                        case 3 -> {
+                            //listar turmas
+                        }
+
+                        default ->
+                            System.out.println("---------------------------------------\nEssa opção não existe! Tente novamente.\n---------------------------------------\n");
+                    }
+
+                } catch (Exception e) {
+                    System.out.println("---------------------------------------\nEntrada inválida! Por favor, digite um número.\n---------------------------------------\n");
+                }
+            } while (opcao < 1 || opcao > 3);
     }
 
 }
