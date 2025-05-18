@@ -1,4 +1,3 @@
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -35,13 +34,27 @@ public class AlunoManager {
         try (Scanner sc = new Scanner(System.in)) {
             System.out.println("Digite o nome do aluno:\n");
             String nome = sc.nextLine();
-            System.out.println("\nDigite a matrícula:\n");
-            Integer matricula = sc.nextInt();
-            sc.nextLine();
+
+            Integer matricula = null;
+            while (matricula == null) {
+                System.out.println("\nDigite a matrícula:\n");
+                try {
+                    matricula = sc.nextInt();
+                    sc.nextLine(); // Limpa o buffer
+                } catch (InputMismatchException e) {
+                    System.out.println("---------------------------------------");
+                    System.out.println("Entrada inválida! Por favor, digite um número.");
+                    System.out.println("---------------------------------------");
+                    sc.nextLine(); // Limpa o buffer para evitar loop infinito
+                }
+            }
+
             if (buscarAlunoPorMatricula(matricula) != null) {
                 System.out.println("\nEssa matrícula já existe.\n");
                 menu.menuAluno();
+                return;
             }
+
             System.out.println("\nDigite o curso:\n");
             String curso = sc.nextLine();
             Boolean especial = false;
@@ -289,9 +302,22 @@ public class AlunoManager {
 
     public Aluno retornaAluno() {
         Scanner sc = new Scanner(System.in);
-        System.out.println("\nDigite a matrícula do aluno que deseja realizar a operação\n");
-        int matricula = sc.nextInt();
-        sc.nextLine();
+        int matricula = -1;
+        boolean entradaValida = false;
+
+        while (!entradaValida) {
+            System.out.println("\nDigite a matrícula do aluno que deseja realizar a operação\n");
+            try {
+                matricula = sc.nextInt();
+                sc.nextLine(); // Limpa o buffer
+                entradaValida = true;
+            } catch (InputMismatchException e) {
+                System.out.println("---------------------------------------");
+                System.out.println("Entrada inválida! Por favor, digite um número.");
+                System.out.println("---------------------------------------");
+                sc.nextLine(); // Limpa o buffer para evitar loop infinito
+            }
+        }
 
         Aluno alunoParaEditar = buscarAlunoPorMatricula(matricula);
 
