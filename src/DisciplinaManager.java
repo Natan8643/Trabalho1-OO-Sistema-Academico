@@ -1,4 +1,7 @@
+
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -10,7 +13,7 @@ public class DisciplinaManager {
     private final String nomeArquivo = "data/disciplina.csv";
     private final File arquivo = new File(nomeArquivo);
     private Menu menu;
-    
+
     public void setMenu(Menu menu) {
         this.menu = menu;
     }
@@ -19,14 +22,14 @@ public class DisciplinaManager {
         try (Scanner sc = new Scanner(System.in)) {
             System.out.println("\nDigite o nome da disciplina:\n");
             String nome = sc.nextLine();
-            
+
             Integer codigo = null;
-            while (codigo == null) { 
+            while (codigo == null) {
                 try {
                     System.out.println("\nDigite o código:\n");
                     codigo = sc.nextInt();
                     sc.nextLine();
-                    
+
                 } catch (InputMismatchException e) {
                     System.out.println("---------------------------------------");
                     System.out.println("Entrada inválida! Por favor, digite um número.");
@@ -50,7 +53,6 @@ public class DisciplinaManager {
                 }
             }
 
-
             System.out.println("\nDigite o pré-requisito:\n");
             String preRequisito = sc.nextLine();
 
@@ -59,6 +61,23 @@ public class DisciplinaManager {
 
             System.out.println("\nDisciplina cadastrada com sucesso!\n");
             menu.menuDisciplina();
+        }
+    }
+
+    public void salvarDados(List<Disciplina> listaDisciplinas) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(arquivo))) {
+            writer.write("Nome,Código,Carga Horária,PréRequisito");
+            writer.newLine();
+
+            for (Disciplina disciplina : listaDisciplinas) {
+                writer.write(disciplina.getNome() + ","
+                        + disciplina.getCodigo() + ","
+                        + disciplina.getCargaHoraria() + ","
+                        + disciplina.getPreRequisito());
+                writer.newLine();
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao salvar os dados no arquivo: " + e.getMessage());
         }
     }
 }
