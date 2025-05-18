@@ -51,4 +51,9 @@ public class Disciplina {
     public void setPreRequisito(String preRequisito) {
         this.preRequisito = preRequisito;
     }
+  
+    @Override
+    public String toString() {
+        return "\nNome: " + getNome() + ", Código: " + getCodigo() + ", Carga horária: " + getCargaHoraria() + "h, Pré-Requisito: " + getPreRequisito();
+    }
 }
