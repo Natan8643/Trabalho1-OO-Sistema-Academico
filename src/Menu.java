@@ -5,11 +5,11 @@ import java.util.Scanner;
 public class Menu {
 
     private Aluno aluno = new Aluno();
-    private AlunoManager alunoManager;
+    private AlunoManager alunoManager = new AlunoManager();
+    private DisciplinaManager disciplinaManager = new DisciplinaManager();
 
     public Menu() {
-        this.alunoManager = new AlunoManager();
-        this.alunoManager.setMenu(this);
+        alunoManager.setMenu(this);
     }
 
     public void encerrarPrograma() {
@@ -117,6 +117,7 @@ public class Menu {
                     switch (opcao) {
                         case 1 -> {
                             //chamar funçao cadastrar disciplina
+
                         }
                         case 2 -> {
                             //criar turma
@@ -134,6 +135,7 @@ public class Menu {
                     System.out.println("---------------------------------------\nEntrada inválida! Por favor, digite um número.\n---------------------------------------\n");
                 }
             } while (opcao < 1 || opcao > 3);
-    }
+        }
 
+    }
 }
