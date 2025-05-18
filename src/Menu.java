@@ -110,6 +110,7 @@ public class Menu {
     public void menuDisciplina() {
         System.out.println("---------------------------------------\nVocê está no Menu Disciplina.\n---------------------------------------\n");
         try (Scanner sc = new Scanner(System.in)) {
+            System.out.println("O que gostaria de fazer?\n\nDigite o número de acordo com sua escolha:\n\n1 - Cadastrar uma disciplina\n2 - Criar uma turma\n3 - Listar turmas\n4 - Voltar para o menu inicial\n5 - Encerrar programa\n");
             int opcao = 0;
             opcao = sc.nextInt();
             sc.nextLine();
@@ -128,6 +129,12 @@ public class Menu {
                         case 3 -> {
                             //listar turmas
                         }
+                        case 4 -> {
+                            menuInicial();
+                        }
+                        case 5 -> {
+                            encerrarPrograma();
+                        }
 
                         default ->
                             System.out.println("---------------------------------------\nEssa opção não existe! Tente novamente.\n---------------------------------------\n");
@@ -136,7 +143,7 @@ public class Menu {
                 } catch (Exception e) {
                     System.out.println("---------------------------------------\nEntrada inválida! Por favor, digite um número.\n---------------------------------------\n");
                 }
-            } while (opcao < 1 || opcao > 3);
+            } while (opcao < 1 || opcao > 5);
         }
 
     }
