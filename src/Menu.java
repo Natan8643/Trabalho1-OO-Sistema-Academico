@@ -10,6 +10,7 @@ public class Menu {
 
     public Menu() {
         alunoManager.setMenu(this);
+        disciplinaManager.setMenu(this);
     }
 
     public void encerrarPrograma() {
@@ -117,6 +118,7 @@ public class Menu {
                     switch (opcao) {
                         case 1 -> {
                             //chamar funçao cadastrar disciplina
+                            disciplinaManager.cadastrarDisciplina();
 
                         }
                         case 2 -> {
