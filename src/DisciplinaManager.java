@@ -129,7 +129,7 @@ public class DisciplinaManager {
         for (Disciplina disciplina : listaDisciplinas) {
             System.out.println(disciplina.getNome() + ","
                     + disciplina.getCodigo() + ","
-                    + disciplina.getCargaHoraria() + ","
+                    + disciplina.getCargaHoraria() + "h,"
                     + disciplina.getPreRequisito() + "\n");
         }
 
@@ -139,5 +139,15 @@ public class DisciplinaManager {
         sc.nextLine();
 
         menu.menuDisciplina();
+    }
+
+
+    public Disciplina buscarDisiciplinaPorCodigo(Integer codigo) {
+        for (Disciplina disciplina : listaDisciplinas) {
+            if (disciplina.getCodigo().equals(codigo)) {
+                return disciplina;
+            }
+        }
+        return null;
     }
 }
