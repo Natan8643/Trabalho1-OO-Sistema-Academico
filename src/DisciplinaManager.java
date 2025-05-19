@@ -18,6 +18,10 @@ public class DisciplinaManager {
         this.menu = menu;
     }
 
+    public List<Disciplina> getListaDisciplinas() {
+        return listaDisciplinas;
+    }
+
     public void cadastrarDisciplina() {
         try (Scanner sc = new Scanner(System.in)) {
             System.out.println("\nDigite o nome da disciplina:\n");
