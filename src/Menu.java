@@ -16,6 +16,7 @@ public class Menu {
     public void encerrarPrograma() {
         System.out.println("\n---------------------------------------\nEncerrando o programa!\n---------------------------------------\n");
         alunoManager.salvarDados(alunoManager.getListaAlunos());
+        disciplinaManager.salvarDados(disciplinaManager.getListaDisciplinas());
         System.exit(0);
     }
 
