@@ -2,7 +2,7 @@
 public class Turma {
 
     private String professor;
-    private Integer semestre;
+    private String semestre;
     private String avaliacao;
     private String tipoDeAula;
     private Integer sala;
@@ -11,7 +11,7 @@ public class Turma {
 
     public Turma() {
         this.professor = "";
-        this.semestre = 0;
+        this.semestre = "";
         this.avaliacao = "";
         this.tipoDeAula = "";
         this.sala = 0;
@@ -19,7 +19,7 @@ public class Turma {
         this.capacidadeMax = 0;
     }
 
-    public Turma(String professor, Integer semestre, String avaliacao, String tipoDeAula, Integer sala, Integer horario, Integer capacidadeMax) {
+    public Turma(String professor, String  semestre, String avaliacao, String tipoDeAula, Integer sala, Integer horario, Integer capacidadeMax) {
         this.professor = professor;
         this.semestre = semestre;
         this.avaliacao = avaliacao;
@@ -37,11 +37,11 @@ public class Turma {
         this.professor = professor;
     }
 
-    public Integer getSemestre() {
+    public String getSemestre() {
         return semestre;
     }
 
-    public void setSemestre(Integer semestre) {
+    public void setSemestre(String semestre) {
         this.semestre = semestre;
     }
 
