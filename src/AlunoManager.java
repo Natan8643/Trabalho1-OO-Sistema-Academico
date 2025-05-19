@@ -1,3 +1,4 @@
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -145,6 +146,7 @@ public class AlunoManager {
                     + aluno.getCursoTrancado() + "\n");
         }
         System.out.println("\nClique ENTER para continuar\n");
+        @SuppressWarnings("resource")
         Scanner sc = new Scanner(System.in);
         sc.nextLine();
 
@@ -301,6 +303,7 @@ public class AlunoManager {
     }
 
     public Aluno retornaAluno() {
+        @SuppressWarnings("resource")
         Scanner sc = new Scanner(System.in);
         int matricula = -1;
         boolean entradaValida = false;

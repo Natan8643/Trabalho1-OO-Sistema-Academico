@@ -4,9 +4,8 @@ import java.util.Scanner;
 
 public class Menu {
 
-    private Aluno aluno = new Aluno();
-    private AlunoManager alunoManager = new AlunoManager();
-    private DisciplinaManager disciplinaManager = new DisciplinaManager();
+    private final AlunoManager alunoManager = new AlunoManager();
+    private final DisciplinaManager disciplinaManager = new DisciplinaManager();
 
     public Menu() {
         alunoManager.setMenu(this);

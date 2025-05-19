@@ -134,6 +134,7 @@ public class DisciplinaManager {
         }
 
         System.out.println("\nClique ENTER para continuar\n");
+        @SuppressWarnings("resource")
         Scanner sc = new Scanner(System.in);
         sc.nextLine();
 
