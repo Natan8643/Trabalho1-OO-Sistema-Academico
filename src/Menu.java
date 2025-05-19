@@ -111,29 +111,31 @@ public class Menu {
     public void menuDisciplina() {
         System.out.println("---------------------------------------\nVocê está no Menu Disciplina.\n---------------------------------------\n");
         try (Scanner sc = new Scanner(System.in)) {
-            System.out.println("O que gostaria de fazer?\n\nDigite o número de acordo com sua escolha:\n\n1 - Cadastrar uma disciplina\n2 - Criar uma turma\n3 - Listar turmas\n4 - Voltar para o menu inicial\n5 - Encerrar programa\n");
-            int opcao = 0;
-            opcao = sc.nextInt();
-            sc.nextLine();
+            System.out.println("O que gostaria de fazer?\n\nDigite o número de acordo com sua escolha:\n\n1 - Cadastrar uma disciplina\n2 - Listar disciplinas\n3 - Criar turmas\n4 - Listar turmas\n5 - Voltar para o menu inicial\n6 - Encerrar o programa\n");
+            int opcao;
             do {
+                opcao = sc.nextInt();
+                sc.nextLine();
                 try {
                     switch (opcao) {
                         case 1 -> {
                             //chamar funçao cadastrar disciplina
                             disciplinaManager.cadastrarDisciplina();
-
                         }
                         case 2 -> {
-                            //criar turma
+                            disciplinaManager.listarDisciplinas();
                         }
 
                         case 3 -> {
-                            //listar turmas
+                            //criar turma
                         }
                         case 4 -> {
-                            menuInicial();
+                            //listar turmas
                         }
                         case 5 -> {
+                            menuInicial();
+                        }
+                        case 6 -> {
                             encerrarPrograma();
                         }
 
