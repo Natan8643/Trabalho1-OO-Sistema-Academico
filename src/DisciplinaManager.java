@@ -1,7 +1,10 @@
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -13,6 +16,10 @@ public class DisciplinaManager {
     private final String nomeArquivo = "data/disciplina.csv";
     private final File arquivo = new File(nomeArquivo);
     private Menu menu;
+
+    public DisciplinaManager() {
+        carregarDados();
+    }
 
     public void setMenu(Menu menu) {
         this.menu = menu;
@@ -83,5 +90,53 @@ public class DisciplinaManager {
         } catch (Exception e) {
             System.out.println("Erro ao salvar os dados no arquivo: " + e.getMessage());
         }
+    }
+
+    private void carregarDados() {
+        if (!arquivo.exists()) {
+            return;
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(arquivo))) {
+            String linha;
+            reader.readLine();
+            while ((linha = reader.readLine()) != null) {
+                String[] dados = linha.split(",");
+                if (dados.length == 4) {
+                    String nome = dados[0].trim();
+                    int codigo = Integer.parseInt(dados[1].trim());
+                    int cargaHoraria = Integer.parseInt(dados[2].trim());
+                    String preRequisito = dados[3].trim();
+
+                    Disciplina disciplina = new Disciplina(nome, codigo, cargaHoraria, preRequisito);
+                    listaDisciplinas.add(disciplina);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao carregar as disciplinas: " + e.getMessage());
+        }
+    }
+
+    public void listarDisciplinas() {
+        if (listaDisciplinas.isEmpty()) {
+            System.out.println("\nA lista de disciplinas está vazia\n");
+            menu.menuDisciplina();
+        }
+
+        System.out.println("\nLista de disciplinas cadastradas\n");
+        System.out.println("Nome,Código,Carga horária(h),Pré-requisito\n");
+
+        for (Disciplina disciplina : listaDisciplinas) {
+            System.out.println(disciplina.getNome() + ","
+                    + disciplina.getCodigo() + ","
+                    + disciplina.getCargaHoraria() + ","
+                    + disciplina.getPreRequisito() + "\n");
+        }
+
+        System.out.println("\nClique ENTER para continuar\n");
+        Scanner sc = new Scanner(System.in);
+        sc.nextLine();
+
+        menu.menuDisciplina();
     }
 }
