@@ -1,10 +1,15 @@
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class Disciplina {
 
     private String nome;
     private Integer codigo;
     private Integer cargaHoraria;
     private String preRequisito;
+    private List<Turma> turmas = new ArrayList<>();
 
     public Disciplina() {
         this.nome = "";
@@ -51,9 +56,15 @@ public class Disciplina {
     public void setPreRequisito(String preRequisito) {
         this.preRequisito = preRequisito;
     }
-  
+
+    public List<Turma> getTurmas() {
+        return turmas;
+    }
+    
+
     @Override
     public String toString() {
         return "\nNome: " + getNome() + ", Código: " + getCodigo() + ", Carga horária: " + getCargaHoraria() + "h, Pré-Requisito: " + getPreRequisito();
     }
+
 }
