@@ -17,6 +17,7 @@ public class AlunoManager {
     private Menu menu;
     private final String nomeArquivo = "data/alunos.csv";
     private final File arquivo = new File(nomeArquivo);
+    private DisciplinaManager disciplinaManager;
 
     public void setMenu(Menu menu) {
         this.menu = menu;
@@ -329,5 +330,57 @@ public class AlunoManager {
             menu.menuAluno();
         }
         return alunoParaEditar;
+    }
+
+    public void cadastrarAlunoNaTurma() {
+        Aluno alunoParaCadastrar = retornaAluno();
+
+        try(Scanner sc = new Scanner(System.in)) {
+            System.out.println("\nDigite o código da disciplina que deseja cadastrar:\n");
+            int codigo = sc.nextInt();
+            sc.nextLine();
+            Disciplina disciplinaParaCadastrar = disciplinaManager.buscarDisiciplinaPorCodigo(codigo);
+            if (disciplinaParaCadastrar == null) {
+                System.out.println("\nDisciplina não encontrada\n");
+                menu.menuAluno();
+            }
+
+            List<Turma> turmas = disciplinaParaCadastrar.getTurmas();
+            if (turmas.isEmpty()) {
+                System.out.println("\nNenhuma turma cadastrada para essa disciplina\n");
+                menu.menuAluno();
+            }
+
+            System.out.println("\nTurmas cadastrada na disciplina " + disciplinaParaCadastrar.getNome() + "\n");
+            
+            for (Turma turma : turmas) {
+                System.out.println("- Turma: " + turma.getNumeroDaTurma() + " | - Professor: " + turma.getProfessor()
+                        + " | Semestre: " + turma.getSemestre()
+                        + " | Sala: " + turma.getSala()
+                        + " | Horário: " + turma.getHorario()
+                        + " | Tipo de Aula: " + turma.getTipoDeAula()
+                        + " | Capacidade Máxima: " + turma.getCapacidadeMax() + "\n");
+               
+            }
+            
+            System.out.println("\nDigite o número da turma que deseja cadastrar o aluno:\n");
+            int escolha = sc.nextInt();
+            sc.nextLine();
+
+            for (Turma turma : turmas) {
+                if (turma.getNumeroDaTurma().equals(escolha)) {
+                    turma.getListaAlunos().add(alunoParaCadastrar);
+                    turma.setVagas(turma.getVagas()-1);
+                    System.out.println("Aluno cadastradado em " + disciplinaParaCadastrar.getNome() + " na turma " + turma.getNumeroDaTurma() + "\n");
+                    menu.menuAluno();
+                }                
+            }
+
+            System.out.println("\nEssa turma não existe\n");
+            menu.menuAluno();
+
+        }
+
+
     }
 }

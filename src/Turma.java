@@ -1,4 +1,7 @@
 
+import java.util.List;
+
+
 public class Turma {
 
     private String professor;
@@ -8,6 +11,10 @@ public class Turma {
     private Integer sala;
     private Integer horario;
     private Integer capacidadeMax;
+    private Disciplina disciplina;
+    private List<Aluno> listaDeAlunos;
+    private Integer numeroDaTurma;
+    private Integer vagas;
 
     public Turma() {
         this.professor = "";
@@ -17,9 +24,11 @@ public class Turma {
         this.sala = 0;
         this.horario = 0;
         this.capacidadeMax = 0;
+        this.numeroDaTurma = 0;
+        this.vagas = 0;
     }
 
-    public Turma(String professor, String  semestre, String avaliacao, String tipoDeAula, Integer sala, Integer horario, Integer capacidadeMax) {
+    public Turma(String professor, String  semestre, String avaliacao, String tipoDeAula, Integer sala, Integer horario, Integer capacidadeMax, Disciplina disciplina, Integer numeroDaTurma) {
         this.professor = professor;
         this.semestre = semestre;
         this.avaliacao = avaliacao;
@@ -27,6 +36,9 @@ public class Turma {
         this.sala = sala;
         this.horario = horario;
         this.capacidadeMax = capacidadeMax;
+        this.disciplina = disciplina;
+        this.numeroDaTurma = numeroDaTurma;
+        this.vagas = capacidadeMax;
     }
     
     public String getProfessor() {
@@ -83,5 +95,29 @@ public class Turma {
 
     public void setCapacidadeMax(Integer capacidadeMax) {
         this.capacidadeMax = capacidadeMax;
+    }
+
+    public Disciplina getDisciplina() {
+        return disciplina;
+    }
+
+    public List<Aluno> getListaAlunos() {
+        return listaDeAlunos;
+    }
+
+    public Integer getNumeroDaTurma() {
+        return numeroDaTurma;
+    }
+
+    public void setNumeroDaTurma(Integer numeroDaTurma) {
+        this.numeroDaTurma = numeroDaTurma;
+    }
+
+    public Integer getVagas() {
+        return vagas;
+    }
+
+    public void setVagas(Integer vagas) {
+        this.vagas = vagas;
     }
 }

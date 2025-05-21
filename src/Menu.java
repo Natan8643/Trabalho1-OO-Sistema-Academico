@@ -5,7 +5,8 @@ import java.util.Scanner;
 public class Menu {
 
     private final AlunoManager alunoManager = new AlunoManager();
-    private final DisciplinaManager disciplinaManager = new DisciplinaManager();
+    private final  DisciplinaManager disciplinaManager = new DisciplinaManager();
+    private final TurmaManager turmaManager = new TurmaManager(disciplinaManager);
 
     public Menu() {
         alunoManager.setMenu(this);
@@ -16,6 +17,7 @@ public class Menu {
         System.out.println("\n---------------------------------------\nEncerrando o programa!\n---------------------------------------\n");
         alunoManager.salvarDados(alunoManager.getListaAlunos());
         disciplinaManager.salvarDados(disciplinaManager.getListaDisciplinas());
+        //turmaManager.salvarDados(turmaManager.getListaDeTurmas());
         System.exit(0);
     }
 
@@ -73,16 +75,17 @@ public class Menu {
                             alunoManager.editarAluno();
                         }
                         case 3 -> {
-                            //chamar funçao listar aluno
                             Aluno alunoAExibir = alunoManager.retornaAluno();
                             System.out.println("\n" + alunoAExibir.toString() + "\n");
                             menuAluno();
                         }
                         case 4 -> {
+                            //chamar funçao listar aluno
                             alunoManager.listarAlunos();
                         }
                         case 5 -> {
                             //chamar funçao matricular na disciplina
+                            alunoManager.cadastrarAlunoNaTurma();
                         }
                         case 6 ->
                             // chamar funçao trancamento
@@ -126,7 +129,7 @@ public class Menu {
                         }
 
                         case 3 -> {
-                            //criar turma
+                            turmaManager.cadastrarTurma();
                         }
                         case 4 -> {
                             //listar turmas
