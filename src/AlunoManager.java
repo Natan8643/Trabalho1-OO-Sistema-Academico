@@ -26,13 +26,11 @@ public class AlunoManager {
     public List<Aluno> getListaAlunos() {
         return alunos;
     }
-    
+
     public AlunoManager(DisciplinaManager disciplinaManager) {
         carregarAlunos(); // Carrega os dados automaticamente ao criar o objeto
         this.disciplinaManager = disciplinaManager;
     }
-    
-    
 
     public void cadastrarAluno() {
         System.out.println();
@@ -338,7 +336,7 @@ public class AlunoManager {
     public void cadastrarAlunoNaTurma() {
         Aluno alunoParaCadastrar = retornaAluno();
 
-        try(Scanner sc = new Scanner(System.in)) {
+        try (Scanner sc = new Scanner(System.in)) {
             System.out.println("\nDigite o código da disciplina que deseja cadastrar:\n");
             int codigo = sc.nextInt();
             sc.nextLine();
@@ -355,17 +353,18 @@ public class AlunoManager {
             }
 
             System.out.println("\nTurmas cadastrada na disciplina " + disciplinaParaCadastrar.getNome() + "\n");
-            
+
             for (Turma turma : turmas) {
                 System.out.println("- Turma: " + turma.getNumeroDaTurma() + " | - Professor: " + turma.getProfessor()
                         + " | Semestre: " + turma.getSemestre()
                         + " | Sala: " + turma.getSala()
                         + " | Horário: " + turma.getHorario()
-                        + " | Tipo de Aula: " + turma.getTipoDeAula()
-                        + " | Capacidade Máxima: " + turma.getCapacidadeMax() + "\n");
-               
+                        + "h | Tipo de Aula: " + turma.getTipoDeAula()
+                        + " | Capacidade Máxima: " + turma.getCapacidadeMax() 
+                        + " | Número de vagas: " + turma.getVagas() + "\n");
+
             }
-            
+
             System.out.println("\nDigite o número da turma que deseja cadastrar o aluno:\n");
             int escolha = sc.nextInt();
             sc.nextLine();
@@ -373,10 +372,10 @@ public class AlunoManager {
             for (Turma turma : turmas) {
                 if (turma.getNumeroDaTurma().equals(escolha)) {
                     turma.getListaAlunos().add(alunoParaCadastrar);
-                    turma.setVagas(turma.getVagas()-1);
-                    System.out.println("Aluno cadastradado em " + disciplinaParaCadastrar.getNome() + " na turma " + turma.getNumeroDaTurma() + "\n");
+                    turma.setVagas(turma.getVagas() - 1);
+                    System.out.println("\nAluno: " + alunoParaCadastrar.getNome() + "cadastradado em " + disciplinaParaCadastrar.getNome() + " na turma " + turma.getNumeroDaTurma() + "\n");
                     menu.menuAluno();
-                }                
+                }
             }
 
             System.out.println("\nEssa turma não existe\n");
@@ -384,6 +383,14 @@ public class AlunoManager {
 
         }
 
+    }
 
+    public Aluno buscarAlunoPorNome(String nome) {
+        for (Aluno aluno : alunos) {
+            if (aluno.getNome().equalsIgnoreCase(nome)) {
+                return aluno;
+            }
+        }
+        return null;
     }
 }

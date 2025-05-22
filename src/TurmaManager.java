@@ -13,6 +13,7 @@ public class TurmaManager {
     private final String nomeArquivo = "data/turma.csv";
     private final File arquivo = new File(nomeArquivo);
     private List<Turma> listaDeTurmas = new ArrayList<>();
+    private AlunoManager alunoManager = new AlunoManager(disciplinaManager);
 
     public TurmaManager(DisciplinaManager disciplinaManager, Menu menu) {
         this.disciplinaManager = disciplinaManager;
@@ -46,7 +47,6 @@ public class TurmaManager {
             String avaliacao = "";
             do {
                 escolha = sc.nextInt();
-                
 
                 if (escolha == 1) {
                     avaliacao = "ponderada";
@@ -65,7 +65,6 @@ public class TurmaManager {
 
             do {
                 escolha = sc.nextInt();
-                System.out.println("teste: " + escolha);
 
                 if (escolha == 1) {
                     tipoDeAula = "presencial";
@@ -81,19 +80,17 @@ public class TurmaManager {
             if (tipoDeAula.equals("presencial")) {
                 System.out.println("\nDigite o número da sala:\n");
                 sala = sc.nextInt();
-                
+
             }
 
             System.out.println("\nDigite o horário em horas. Ex: 10\n");
             int horario = sc.nextInt();
-            
 
             System.out.println("\nDigite a capacidade máxima:\n");
             int capacidadeMax = sc.nextInt();
             sc.nextLine();
 
-
-            Turma novaTurma = new Turma(professor, semestre, avaliacao, tipoDeAula, sala, horario, capacidadeMax, disciplinaDaTurma,numeroDaTurma);
+            Turma novaTurma = new Turma(professor, semestre, avaliacao, tipoDeAula, sala, horario, capacidadeMax, disciplinaDaTurma, numeroDaTurma);
             disciplinaDaTurma.getTurmas().add(novaTurma);
             listaDeTurmas.add(novaTurma);
 
@@ -104,13 +101,13 @@ public class TurmaManager {
     }
 
     public void listarTurmas() {
-        
+
     }
 
     public void salvarDados(List<Turma> listaTurmas) {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(arquivo))) {
-            writer.write("Disciplina,Semestre,Turma,Professor,Sala,Horário,Tipo de Aula,Avaliação,Capacidade Máxima,Alunos");
+            writer.write("Disciplina,Semestre,Turma,Professor,Sala,Horário,Tipo de Aula,Avaliação,Capacidade Máxima,Número de vagas,Alunos");
             writer.newLine();
 
             for (Turma turma : listaTurmas) {
@@ -132,6 +129,7 @@ public class TurmaManager {
                         + turma.getTipoDeAula() + ","
                         + turma.getAvaliacao() + ","
                         + turma.getCapacidadeMax() + ","
+                        + turma.getVagas() + "," 
                         + alunosStr.toString()
                 );
                 writer.newLine();
@@ -144,52 +142,59 @@ public class TurmaManager {
     }
 
     public void carregarDados() {
-    if (!arquivo.exists()) return;
-
-    try (Scanner scanner = new Scanner(arquivo)) {
-        if (scanner.hasNextLine()) scanner.nextLine(); // Pula o cabeçalho
-
-        while (scanner.hasNextLine()) {
-            String linha = scanner.nextLine();
-            String[] campos = linha.split(",", -1);
-
-            // Ajuste os índices conforme a ordem dos campos no CSV
-            String nomeDisciplina = campos[0];
-            String semestre = campos[1];
-            int numeroDaTurma = Integer.parseInt(campos[2]); // ajuste se você salvar esse campo
-            String professor = campos[3];
-            int sala = Integer.parseInt(campos[4]);
-            int horario = Integer.parseInt(campos[5]);
-            String tipoDeAula = campos[6];
-            String avaliacao = campos[7];
-            int capacidadeMax = Integer.parseInt(campos[8]);
-            String alunosStr = campos.length > 9 ? campos[9] : "";
-
-            // Busca a disciplina pelo nome (ou código, se preferir)
-            Disciplina disciplina = disciplinaManager.getListaDisciplinas().stream()
-                .filter(d -> d.getNome().equalsIgnoreCase(nomeDisciplina))
-                .findFirst().orElse(null);
-
-            if (disciplina == null) continue;
-
-            Turma turma = new Turma(professor, semestre, avaliacao, tipoDeAula, sala, horario, capacidadeMax, disciplina, numeroDaTurma);
-
-            // Adiciona alunos à turma, se houver
-            // if (!alunosStr.isEmpty()) {
-            //     String[] nomesAlunos = alunosStr.split(",");
-            //     for (String nomeAluno : nomesAlunos) {
-            //         // Aqui você pode buscar o aluno pelo nome na sua lista de alunos, se desejar
-            //         // Exemplo: Aluno aluno = alunoManager.buscarAlunoPorNome(nomeAluno.trim());
-            //         // turma.getListaAlunos().add(aluno);
-            //     }
-            // }
-
-            disciplina.getTurmas().add(turma);
-            listaDeTurmas.add(turma);
+        if (!arquivo.exists()) {
+            return;
         }
-    } catch (Exception e) {
-        System.out.println("Erro ao carregar os dados do arquivo: " + e.getMessage());
+
+        try (Scanner scanner = new Scanner(arquivo)) {
+            if (scanner.hasNextLine()) {
+                scanner.nextLine(); // Pula o cabeçalho
+            }
+            while (scanner.hasNextLine()) {
+                String linha = scanner.nextLine();
+                String[] campos = linha.split(",", -1);
+
+                // Ajuste os índices conforme a ordem dos campos no CSV
+                String nomeDisciplina = campos[0];
+                String semestre = campos[1];
+                int numeroDaTurma = Integer.parseInt(campos[2]); // ajuste se você salvar esse campo
+                String professor = campos[3];
+                int sala = Integer.parseInt(campos[4]);
+                int horario = Integer.parseInt(campos[5]);
+                String tipoDeAula = campos[6];
+                String avaliacao = campos[7];
+                int capacidadeMax = Integer.parseInt(campos[8]);
+                int vagas = Integer.parseInt(campos[9]);
+                String alunosStr = campos.length > 10 ? campos[10] : "";
+
+                // Busca a disciplina pelo nome (ou código, se preferir)
+                Disciplina disciplina = disciplinaManager.getListaDisciplinas().stream()
+                        .filter(d -> d.getNome().equalsIgnoreCase(nomeDisciplina))
+                        .findFirst().orElse(null);
+
+                if (disciplina == null) {
+                    continue;
+                }
+
+                Turma turma = new Turma(professor, semestre, avaliacao, tipoDeAula, sala, horario, capacidadeMax, disciplina, numeroDaTurma);
+
+                // Adiciona alunos à turma, se houver
+                if (!alunosStr.isEmpty()) {
+                    String[] nomesAlunos = alunosStr.split(",");
+                    for (String nomeAluno : nomesAlunos) {
+                        Aluno aluno = alunoManager.buscarAlunoPorNome(nomeAluno.trim());
+                        if (aluno != null) {
+                            turma.getListaAlunos().add(aluno);
+                        }
+                    }
+                }
+
+                disciplina.getTurmas().add(turma);
+                listaDeTurmas.add(turma);
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao carregar os dados do arquivo: " + e.getMessage());
+        }
     }
-}
 
 }
