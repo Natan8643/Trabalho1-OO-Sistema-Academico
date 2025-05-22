@@ -336,6 +336,17 @@ public class AlunoManager {
     public void cadastrarAlunoNaTurma() {
         Aluno alunoParaCadastrar = retornaAluno();
 
+        if (alunoParaCadastrar.getCursoTrancado() == true || alunoParaCadastrar.getSemestreTrancado() == true) {
+            System.out.println("\nEsse aluno não pode se matricular, pois seu semestre ou curso está trancado\n");
+            menu.menuAluno();
+        }
+
+        if (alunoParaCadastrar instanceof AlunoEspecial esp) {
+            if (esp.getMateria() > 2) {
+                System.out.println("\nO aluno " + esp.getNome() + " já esta matricululado em duas matérias\n");
+            }
+        }
+
         try (Scanner sc = new Scanner(System.in)) {
             System.out.println("\nDigite o código da disciplina que deseja cadastrar:\n");
             int codigo = sc.nextInt();
@@ -360,7 +371,7 @@ public class AlunoManager {
                         + " | Sala: " + turma.getSala()
                         + " | Horário: " + turma.getHorario()
                         + "h | Tipo de Aula: " + turma.getTipoDeAula()
-                        + " | Capacidade Máxima: " + turma.getCapacidadeMax() 
+                        + " | Capacidade Máxima: " + turma.getCapacidadeMax()
                         + " | Número de vagas: " + turma.getVagas() + "\n");
 
             }
@@ -373,7 +384,9 @@ public class AlunoManager {
                 if (turma.getNumeroDaTurma().equals(escolha)) {
                     turma.getListaAlunos().add(alunoParaCadastrar);
                     turma.setVagas(turma.getVagas() - 1);
-                    System.out.println("\nAluno: " + alunoParaCadastrar.getNome() + "cadastradado em " + disciplinaParaCadastrar.getNome() + " na turma " + turma.getNumeroDaTurma() + "\n");
+                    alunoParaCadastrar.setMateria(alunoParaCadastrar.getMateria() + 1);
+
+                    System.out.println("\nAluno: " + alunoParaCadastrar.getNome() + " cadastradado em " + disciplinaParaCadastrar.getNome() + " na turma " + turma.getNumeroDaTurma() + "\n");
                     menu.menuAluno();
                 }
             }
