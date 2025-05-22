@@ -17,6 +17,7 @@ public class TurmaManager {
     public TurmaManager(DisciplinaManager disciplinaManager, Menu menu) {
         this.disciplinaManager = disciplinaManager;
         this.menu = menu;
+        carregarDados();
     }
 
     public List<Turma> getListaDeTurmas() {
@@ -95,7 +96,7 @@ public class TurmaManager {
             Turma novaTurma = new Turma(professor, semestre, avaliacao, tipoDeAula, sala, horario, capacidadeMax, disciplinaDaTurma,numeroDaTurma);
             disciplinaDaTurma.getTurmas().add(novaTurma);
             listaDeTurmas.add(novaTurma);
-            
+
             System.out.println("\nTurma de " + disciplinaDaTurma.getNome() + " cadastrada com sucesso!\n");
             menu.menuDisciplina();
 
@@ -109,7 +110,7 @@ public class TurmaManager {
     public void salvarDados(List<Turma> listaTurmas) {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(arquivo))) {
-            writer.write("Disciplina,Semestre,Professor,Sala,Horário,Tipo de Aula,Avaliação,Capacidade Máxima,Alunos");
+            writer.write("Disciplina,Semestre,Turma,Professor,Sala,Horário,Tipo de Aula,Avaliação,Capacidade Máxima,Alunos");
             writer.newLine();
 
             for (Turma turma : listaTurmas) {
@@ -124,7 +125,8 @@ public class TurmaManager {
 
                 writer.write(turma.getDisciplina().getNome() + ","
                         + turma.getSemestre() + ","
-                        + turma.getProfessor()
+                        + turma.getNumeroDaTurma() + ","
+                        + turma.getProfessor() + ","
                         + turma.getSala() + ","
                         + turma.getHorario() + ","
                         + turma.getTipoDeAula() + ","
@@ -140,5 +142,54 @@ public class TurmaManager {
         }
 
     }
+
+    public void carregarDados() {
+    if (!arquivo.exists()) return;
+
+    try (Scanner scanner = new Scanner(arquivo)) {
+        if (scanner.hasNextLine()) scanner.nextLine(); // Pula o cabeçalho
+
+        while (scanner.hasNextLine()) {
+            String linha = scanner.nextLine();
+            String[] campos = linha.split(",", -1);
+
+            // Ajuste os índices conforme a ordem dos campos no CSV
+            String nomeDisciplina = campos[0];
+            String semestre = campos[1];
+            int numeroDaTurma = Integer.parseInt(campos[2]); // ajuste se você salvar esse campo
+            String professor = campos[3];
+            int sala = Integer.parseInt(campos[4]);
+            int horario = Integer.parseInt(campos[5]);
+            String tipoDeAula = campos[6];
+            String avaliacao = campos[7];
+            int capacidadeMax = Integer.parseInt(campos[8]);
+            String alunosStr = campos.length > 9 ? campos[9] : "";
+
+            // Busca a disciplina pelo nome (ou código, se preferir)
+            Disciplina disciplina = disciplinaManager.getListaDisciplinas().stream()
+                .filter(d -> d.getNome().equalsIgnoreCase(nomeDisciplina))
+                .findFirst().orElse(null);
+
+            if (disciplina == null) continue;
+
+            Turma turma = new Turma(professor, semestre, avaliacao, tipoDeAula, sala, horario, capacidadeMax, disciplina, numeroDaTurma);
+
+            // Adiciona alunos à turma, se houver
+            // if (!alunosStr.isEmpty()) {
+            //     String[] nomesAlunos = alunosStr.split(",");
+            //     for (String nomeAluno : nomesAlunos) {
+            //         // Aqui você pode buscar o aluno pelo nome na sua lista de alunos, se desejar
+            //         // Exemplo: Aluno aluno = alunoManager.buscarAlunoPorNome(nomeAluno.trim());
+            //         // turma.getListaAlunos().add(aluno);
+            //     }
+            // }
+
+            disciplina.getTurmas().add(turma);
+            listaDeTurmas.add(turma);
+        }
+    } catch (Exception e) {
+        System.out.println("Erro ao carregar os dados do arquivo: " + e.getMessage());
+    }
+}
 
 }
