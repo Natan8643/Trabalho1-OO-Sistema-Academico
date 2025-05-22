@@ -114,7 +114,7 @@ public class TurmaManager {
                 StringBuilder alunosStr = new StringBuilder();
 
                 for (Aluno aluno : turma.getListaAlunos()) {
-                    alunosStr.append(aluno.getNome()).append(",");
+                    alunosStr.append(aluno.getNome()).append(";");
                 }
                 if (alunosStr.length() > 0) {
                     alunosStr.setLength(alunosStr.length() - 1);
@@ -180,7 +180,7 @@ public class TurmaManager {
 
                 // Adiciona alunos à turma, se houver
                 if (!alunosStr.isEmpty()) {
-                    String[] nomesAlunos = alunosStr.split(",");
+                    String[] nomesAlunos = alunosStr.split(";");
                     for (String nomeAluno : nomesAlunos) {
                         Aluno aluno = alunoManager.buscarAlunoPorNome(nomeAluno.trim());
                         if (aluno != null) {
@@ -188,7 +188,7 @@ public class TurmaManager {
                         }
                     }
                 }
-
+                turma.setVagas(turma.getCapacidadeMax() - turma.getListaAlunos().size());
                 disciplina.getTurmas().add(turma);
                 listaDeTurmas.add(turma);
             }
