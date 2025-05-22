@@ -4,20 +4,21 @@ import java.util.Scanner;
 
 public class Menu {
 
-    private final AlunoManager alunoManager = new AlunoManager();
     private final  DisciplinaManager disciplinaManager = new DisciplinaManager();
-    private final TurmaManager turmaManager = new TurmaManager(disciplinaManager);
+    private final AlunoManager alunoManager = new AlunoManager(disciplinaManager);
+    private final TurmaManager turmaManager;
 
     public Menu() {
         alunoManager.setMenu(this);
         disciplinaManager.setMenu(this);
+        turmaManager = new TurmaManager(disciplinaManager, this);
     }
 
     public void encerrarPrograma() {
         System.out.println("\n---------------------------------------\nEncerrando o programa!\n---------------------------------------\n");
         alunoManager.salvarDados(alunoManager.getListaAlunos());
         disciplinaManager.salvarDados(disciplinaManager.getListaDisciplinas());
-        //turmaManager.salvarDados(turmaManager.getListaDeTurmas());
+        turmaManager.salvarDados(turmaManager.getListaDeTurmas());
         System.exit(0);
     }
 
@@ -114,7 +115,7 @@ public class Menu {
         System.out.println("---------------------------------------\nVocê está no Menu Disciplina.\n---------------------------------------\n");
         try (Scanner sc = new Scanner(System.in)) {
             System.out.println("O que gostaria de fazer?\n\nDigite o número de acordo com sua escolha:\n\n1 - Cadastrar uma disciplina\n2 - Listar disciplinas\n3 - Criar turmas\n4 - Listar turmas\n5 - Voltar para o menu inicial\n6 - Encerrar o programa\n");
-            int opcao;
+            int opcao = 0;
             do {
                 opcao = sc.nextInt();
                 sc.nextLine();
@@ -148,7 +149,7 @@ public class Menu {
                 } catch (Exception e) {
                     System.out.println("---------------------------------------\nEntrada inválida! Por favor, digite um número.\n---------------------------------------\n");
                 }
-            } while (opcao < 1 || opcao > 5);
+            } while (opcao < 1 || opcao > 6);
         }
 
     }

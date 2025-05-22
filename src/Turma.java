@@ -1,4 +1,5 @@
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -27,7 +28,7 @@ public class Turma {
         this.numeroDaTurma = 0;
         this.vagas = 0;
     }
-
+    
     public Turma(String professor, String  semestre, String avaliacao, String tipoDeAula, Integer sala, Integer horario, Integer capacidadeMax, Disciplina disciplina, Integer numeroDaTurma) {
         this.professor = professor;
         this.semestre = semestre;
@@ -39,6 +40,7 @@ public class Turma {
         this.disciplina = disciplina;
         this.numeroDaTurma = numeroDaTurma;
         this.vagas = capacidadeMax;
+        this.listaDeAlunos = new ArrayList<>();
     }
     
     public String getProfessor() {

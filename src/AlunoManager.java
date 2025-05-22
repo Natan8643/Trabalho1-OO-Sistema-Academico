@@ -17,7 +17,7 @@ public class AlunoManager {
     private Menu menu;
     private final String nomeArquivo = "data/alunos.csv";
     private final File arquivo = new File(nomeArquivo);
-    private DisciplinaManager disciplinaManager;
+    private final DisciplinaManager disciplinaManager;
 
     public void setMenu(Menu menu) {
         this.menu = menu;
@@ -26,10 +26,13 @@ public class AlunoManager {
     public List<Aluno> getListaAlunos() {
         return alunos;
     }
-
-    public AlunoManager() {
+    
+    public AlunoManager(DisciplinaManager disciplinaManager) {
         carregarAlunos(); // Carrega os dados automaticamente ao criar o objeto
+        this.disciplinaManager = disciplinaManager;
     }
+    
+    
 
     public void cadastrarAluno() {
         System.out.println();
