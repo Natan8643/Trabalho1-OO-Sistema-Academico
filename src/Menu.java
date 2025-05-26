@@ -166,7 +166,7 @@ public class Menu {
 
             do {
                 System.out.println("\n---------------------------------------\nVocê está no Menu Acompanhamento.\n---------------------------------------\n");
-                System.out.println("O que gostaria de fazer?\n\nDigite o número de acordo com sua escolha:\n\n1 - Lançar nota do aluno\n2 - Status do aluno nas matérias\n3 - Relatório da turma\n4 - Relatório da disciplina\n5 - Relatório do professor\n 6 - Voltar para o menu inicial\n7 - Encerrar programa\n");
+                System.out.println("O que gostaria de fazer?\n\nDigite o número de acordo com sua escolha:\n\n1 - Lançar nota do aluno\n2 - Status do aluno nas matérias\n3 - Relatório da turma\n4 - Relatório da disciplina\n5 - Relatório do professor\n6 - Voltar para o menu inicial\n7 - Encerrar programa\n");
 
                 try {
                     opcao = sc.nextInt();
@@ -177,18 +177,22 @@ public class Menu {
                         }
                         case 2 -> {
                             //chamar funçao status aluno
+                            acompanhamentoManager.statusDoAluno();
                         }
 
                         case 3 -> {
                             //chamar funçao relatorio turma
+                            acompanhamentoManager.relatorioTurma();
                         }
 
                         case 4 -> {
-                            //chama funçao relatorio disciplina
+                            //chamar funçao relatorio disciplina
+                            acompanhamentoManager.relatorioDisciplina();
                         }
 
                         case 5 -> {
                             //chamar funçao relatorio do professor
+                            acompanhamentoManager.relatorioProfessor();
                         }
                         
                         case 6 -> {
