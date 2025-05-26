@@ -24,10 +24,12 @@ public class Acompanhamento {
         this.presenca = 0;
         this.mediaFinal = 0;
         this.aprovacao = false;
+        this.disciplina = new Disciplina();
     }
 
-    public Acompanhamento(Aluno aluno, int matricula, String materia, Turma turma, double notaP1, double notaP2, double notaP3, double seminario, double listaDeExercicios, Integer presenca, double mediaFinal, boolean aprovacao) {
+    public Acompanhamento(Aluno aluno, Disciplina disciplina, Turma turma, double notaP1, double notaP2, double notaP3, double seminario, double listaDeExercicios, Integer presenca, double mediaFinal, boolean aprovacao) {
         this.aluno = aluno;
+        this.disciplina = disciplina;
         this.turma = turma;
         this.notaP1 = notaP1;
         this.notaP2 = notaP2;
