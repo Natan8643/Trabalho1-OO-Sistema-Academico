@@ -1,3 +1,4 @@
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -25,9 +26,9 @@ public class AcompanhamentoManager {
         this.arquivo = new File(nomeArquivo);
     }
 
-    public AcompanhamentoManager(AlunoManager alunoManager, DisciplinaManager disciplinaManager ,Menu menu) {
+    public AcompanhamentoManager(AlunoManager alunoManager, DisciplinaManager disciplinaManager, Menu menu) {
         this.alunoManager = alunoManager;
-        this.disciplinaManager = disciplinaManager; 
+        this.disciplinaManager = disciplinaManager;
         this.menu = menu;
         this.nomeArquivo = "data/acompanhamento.csv";
         this.arquivo = new File(nomeArquivo);
@@ -56,6 +57,13 @@ public class AcompanhamentoManager {
                 }
             }
 
+            if (turmaEncontrada == null) {
+                System.out.println("\nO aluno não está matriculado em nenhuma turma dessa disciplina.");
+                menu.menuAcompanhamento();
+                return;
+            }
+
+            // Agora é seguro acessar turmaEncontrada.getNumeroDaTurma()
             System.out.println("\nAluno: " + aluno.getNome() + " | Disciplina: " + disciplina.getNome() + " | Turma: " + turmaEncontrada.getNumeroDaTurma() + " | Avaliação: " + turmaEncontrada.getAvaliacao() + "\n\nDigite ENTER para continuar\n");
             sc.nextLine();
 
@@ -80,7 +88,7 @@ public class AcompanhamentoManager {
 
             double mediaFinal = calcularMediaFinal(turmaEncontrada, notaP1, notaP2, notaP3, seminario, listaDeExercicios);
             boolean aprovacao = aprovacao(presenca, mediaFinal);
-            Acompanhamento statusDoAluno = new Acompanhamento(aluno, aluno.getMatricula(), disciplina.getNome(), turmaEncontrada, notaP1, notaP2, notaP3, seminario, listaDeExercicios, presenca, mediaFinal, aprovacao);
+            Acompanhamento statusDoAluno = new Acompanhamento(aluno, disciplina, turmaEncontrada, notaP1, notaP2, notaP3, seminario, listaDeExercicios, presenca, mediaFinal, aprovacao);
             listaAcompanhamentos.add(statusDoAluno);
 
             System.out.println("\nNota lançada do aluno " + aluno.getNome() + " lançada com sucesso\n");
@@ -96,7 +104,7 @@ public class AcompanhamentoManager {
             mediaFinal = (notaP1 + notaP2 * 2 + notaP3 * 3 + seminario + listaDeExercicios) / 8;
         }
 
-        return Math.round(mediaFinal * 100.0)/100.0;
+        return Math.round(mediaFinal * 100.0) / 100.0;
     }
 
     private boolean aprovacao(int presenca, double mediaFinal) {
@@ -171,10 +179,10 @@ public class AcompanhamentoManager {
                     }
 
                     if (aluno != null && disciplina != null && turma != null) {
-                        Acompanhamento acompanhamento = new Acompanhamento(aluno, matricula,disciplina.getNome(), turma, notaP1, notaP2, notaP3, seminario, listaDeExercicios, presenca, mediaFinal, aprovacao);
+                        Acompanhamento acompanhamento = new Acompanhamento(aluno, disciplina, turma, notaP1, notaP2, notaP3, seminario, listaDeExercicios, presenca, mediaFinal, aprovacao);
                         listaAcompanhamentos.add(acompanhamento);
                     }
-                    
+
                 }
 
             }
@@ -183,5 +191,138 @@ public class AcompanhamentoManager {
             System.out.println("Erro ao carregar as disciplinas: " + e.getMessage());
         }
 
+    }
+
+    public void statusDoAluno() {
+        Aluno aluno = alunoManager.retornaAluno();
+
+        System.out.println("\nTurmas do aluno " + aluno.getNome() + "\n");
+        for (Acompanhamento acompanhamento : listaAcompanhamentos) {
+            if (acompanhamento.getAluno().equals(aluno)) {
+                Turma turma = acompanhamento.getTurma();
+                Disciplina disciplina = acompanhamento.getDisciplina();
+                System.out.print("\nDisciplina: " + disciplina.getNome() + " | Turma: " + turma.getNumeroDaTurma() + " | Média final: " + acompanhamento.getMediaFinal() + " | Presença " + acompanhamento.getPresenca() + "% | Aprovado: " + acompanhamento.getAprovacao());
+            }
+            if (acompanhamento.getAprovacao() == true) {
+                System.out.println();
+            }
+
+            if (acompanhamento.getAprovacao() == false) {
+
+                if (acompanhamento.getMediaFinal() < 5.0 && acompanhamento.getPresenca() < 75) {
+                    System.out.println(" | Reprovado por média menor que 5 e por presença menor que 75%\n");
+                } else if (acompanhamento.getMediaFinal() < 5.0 || acompanhamento.getPresenca() < 75) {
+
+                    if (acompanhamento.getMediaFinal() < 5.0) {
+                        System.out.println(" | Reprovado por média menor que 5\n");
+                    } else if (acompanhamento.getPresenca() < 75) {
+                        System.out.println(" | Reprovado por presença menor que 75%\n");
+                    }
+                }
+
+            }
+        }
+        menu.menuAcompanhamento();
+    }
+
+    public void relatorioTurma() {
+        try (Scanner sc = new Scanner(System.in)) {
+            System.out.println("\nDigite o código da disciplina que deseja ver as turmas:\n");
+            int codigo = sc.nextInt();
+            sc.nextLine();
+            Disciplina disciplina = disciplinaManager.buscarDisiciplinaPorCodigo(codigo);
+
+            System.out.println("\nDeseja com ou sem os dados da turma?\n\nDigite\n1 - Com dados\n2 - Sem dados\n");
+            int opcao = sc.nextInt();
+            sc.nextLine();
+            for (Turma turma : disciplina.getTurmas()) {
+                int aprovados = 0;
+                double totalAlunos = 0;
+                double somaMedias = 0;
+
+                for (Acompanhamento acompanhamento : listaAcompanhamentos) {
+                    if (acompanhamento.getTurma().equals(turma)) {
+                        somaMedias += acompanhamento.getMediaFinal();
+                        totalAlunos++;
+                        if (acompanhamento.getAprovacao()) {
+                            aprovados++;
+                        }
+                    }
+                }
+
+                double mediaTurma = (totalAlunos > 0) ? Math.round((somaMedias / totalAlunos) * 100.0) / 100.0 : 0;
+
+                if (opcao == 1) {
+                    System.out.println("\nTurma: " + turma.getNumeroDaTurma() + " | Professor: "+ turma.getProfessor() + " | Tipo de aula: " + turma.getTipoDeAula() + " | Aprovados: " + aprovados + " | Média da turma: " + mediaTurma + "\n");
+                }
+                else if (opcao == 2) {
+                    System.out.println("\nTurma: " + turma.getNumeroDaTurma() + " | Aprovados: " + aprovados + " | Média da turma: " + mediaTurma + "\n");
+                }
+            }
+
+            menu.menuAcompanhamento();
+        }
+    }
+
+    public void relatorioDisciplina() {
+        try (Scanner sc = new Scanner(System.in)) {
+            System.out.println("\nDigite o código da disciplina que deseja ver o relatório:\n");
+            int codigo = sc.nextInt();
+            sc.nextLine();
+            Disciplina disciplina = disciplinaManager.buscarDisiciplinaPorCodigo(codigo);
+
+            int aprovados = 0;
+            double totalAlunos = 0;
+            double somaMedias = 0;
+
+            for (Acompanhamento acompanhamento : listaAcompanhamentos) {
+                if (acompanhamento.getDisciplina().equals(disciplina)) {
+                    somaMedias += acompanhamento.getMediaFinal();
+                    totalAlunos++;
+                    if (acompanhamento.getAprovacao()) {
+                        aprovados++;
+                    }
+                }
+
+            }
+
+            double mediaDisciplina = (totalAlunos > 0) ? Math.round((somaMedias / totalAlunos) * 100.0) / 100.0 : 0;
+            System.out.println("\nDisciplina: " + disciplina.getNome() + " | Aprovados: " + aprovados + " | Média da turma: " + mediaDisciplina + "\n");
+
+            menu.menuAcompanhamento();
+        }
+    }
+
+    public void relatorioProfessor() {
+        try (Scanner sc = new Scanner(System.in)) {
+            System.out.println("\nDigite o nome do professor que deseja ver o relatório\n");
+            String professor = sc.nextLine();
+
+            int aprovados = 0;
+            double totalAlunos = 0;
+            double somaMedias = 0;
+            boolean professorEncontrado = false;
+
+            for (Acompanhamento acompanhamento : listaAcompanhamentos) {
+                if (acompanhamento.getTurma().getProfessor().equalsIgnoreCase(professor)) {
+                    professorEncontrado = true;
+                    somaMedias += acompanhamento.getMediaFinal();
+                    totalAlunos++;
+                    if (acompanhamento.getAprovacao()) {
+                        aprovados++;
+                    }
+
+                }
+            }
+            if (!professorEncontrado) {
+                System.out.println("\nProfessor não encontrado\n");
+                menu.menuAcompanhamento();
+            }
+
+            double mediaDisciplina = (totalAlunos > 0) ? Math.round((somaMedias / totalAlunos) * 100.0) / 100.0 : 0;
+            System.out.println("\nProfessor: " + professor + " | Aprovados: " + aprovados + " | Média da turma: " + mediaDisciplina + "\n");
+
+            menu.menuAcompanhamento();
+        }
     }
 }
