@@ -1,4 +1,8 @@
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class Aluno {
 
     private String nome;
@@ -8,6 +12,7 @@ public class Aluno {
     private Boolean semestreTrancado;
     private Boolean especial;
     private Integer materia;
+    private List<String> preRequisito;
 
     public Aluno() {
         this.nome = "";
@@ -28,6 +33,7 @@ public class Aluno {
         this.semestreTrancado = semestreTrancado;
         this.especial = especial;
         this.materia = 0;
+        this.preRequisito = new ArrayList<>();
     }
 
     public String getNome() {
@@ -85,10 +91,13 @@ public class Aluno {
     public void setMateria(Integer materia) {
         this.materia = materia;
     }
+    
+    public List<String> getPreRequisito() {
+    return preRequisito;
+    }
 
     @Override
     public String toString() {
-        return "Nome: " + getNome() + ", Matricula: " + getMatricula() + ", Curso: " + getCurso() + ", Especial: " + getEspecial() + ", Semestre trancado: " + getSemestreTrancado() + ", Curso trancado: " + getCursoTrancado();
+        return "Nome: " + getNome() + ", Matricula: " + getMatricula() + ", Curso: " + getCurso() + ", Especial: " + getEspecial() + ", Semestre trancado: " + getSemestreTrancado() + ", Curso trancado: " + getCursoTrancado() + ", Pré-requisitos: " + getPreRequisito();
     }
-
 }

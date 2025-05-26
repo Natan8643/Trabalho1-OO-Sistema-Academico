@@ -1,4 +1,3 @@
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -79,14 +78,31 @@ public class AlunoManager {
 
             } while (!resposta.equalsIgnoreCase("sim") && !resposta.equalsIgnoreCase("nao"));
 
-            Aluno aluno = new Aluno(nome, matricula, curso, especial, false, false);
+            Aluno aluno;
+            if (especial) {
+                aluno = new AlunoEspecial(nome, matricula, curso, especial, false, false);
+            } else {
+                aluno = new Aluno(nome, matricula, curso, especial, false, false);
+            }
             alunos.add(aluno);
 
             if (especial) {
                 AlunoEspecial alunoEspecial = new AlunoEspecial(nome, matricula, curso, especial, false, false);
                 alunoEsp.add(alunoEspecial);
             }
-            System.out.println("\nAluno cadastrado\n");
+
+            System.out.println("\nDigite as matérias que o aluno já concluiu: (Digite separadas por ENTER)\n\nCaso queria finalizar o cadastro, digite 1\n");
+            String preRequisitos;
+
+            do {
+                preRequisitos = sc.nextLine();
+                if (!preRequisitos.equals("1")) {
+                    aluno.getPreRequisito().add(preRequisitos);
+                }
+
+            } while (!preRequisitos.equals("1"));
+
+            System.out.println("\nAluno " + aluno.getNome() + " cadastrado\n");
 
             menu.menuAluno();
         }
@@ -121,7 +137,18 @@ public class AlunoManager {
 
                 } while (!resposta.equalsIgnoreCase("sim") && !resposta.equalsIgnoreCase("nao"));
 
-                System.out.println("\nAluno editado com sucesso!\n");
+                alunoParaEditar.getPreRequisito().clear();
+
+                String preRequisitos;
+                do {
+                    preRequisitos = sc.nextLine();
+                    if (!preRequisitos.equals("1")) {
+                        alunoParaEditar.getPreRequisito().add(preRequisitos);
+                    }
+
+                } while (!preRequisitos.equals("1"));
+
+                System.out.println("\nAluno " + alunoParaEditar.getNome() + " editado com sucesso!\n");
                 menu.menuAluno();
             }
             System.out.println("Matrícula não encontrada.");
@@ -137,15 +164,20 @@ public class AlunoManager {
         }
 
         System.out.println("\nLista de Alunos Cadastrados:\n");
-        System.out.println("Nome,Matrícula,Curso,Especial,Semestre trancado,Curso trancado\n"); // Cabeçalho
+        System.out.println("Nome,Matrícula,Curso,Especial,Semestre trancado,Curso trancado,Pré-requisito\n"); // Cabeçalho
 
         for (Aluno aluno : alunos) {
+            String preReqStr = "";
+            if (aluno.getPreRequisito() != null && !aluno.getPreRequisito().isEmpty()) {
+                preReqStr = String.join(";", aluno.getPreRequisito());
+            }
             System.out.println(aluno.getNome() + ","
                     + aluno.getMatricula() + ","
                     + aluno.getCurso() + ","
                     + aluno.getEspecial() + ","
                     + aluno.getSemestreTrancado() + ","
-                    + aluno.getCursoTrancado() + "\n");
+                    + aluno.getCursoTrancado() + ","
+                    + preReqStr + "\n");
         }
         System.out.println("\nClique ENTER para continuar\n");
         @SuppressWarnings("resource")
@@ -158,17 +190,25 @@ public class AlunoManager {
     public void salvarDados(List<Aluno> alunos) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(arquivo))) {
             // Escreve o cabeçalho no arquivo
-            writer.write("Nome,Matrícula,Curso,Especial,Semestre trancado,Curso trancado");
+            writer.write("Nome,Matrícula,Curso,Especial,Matérias,Semestre trancado,Curso trancado,Pré-Requisitos");
             writer.newLine();
 
             // Escreve os dados de cada aluno
             for (Aluno aluno : alunos) {
+
+                String preRequisitosStr = "";
+                if (aluno.getPreRequisito() != null && !aluno.getPreRequisito().isEmpty()) {
+                    preRequisitosStr = String.join(";", aluno.getPreRequisito());
+                }
+
                 writer.write(aluno.getNome() + ","
                         + aluno.getMatricula() + ","
                         + aluno.getCurso() + ","
                         + aluno.getEspecial() + ","
+                        + aluno.getMateria() + ","
                         + aluno.getSemestreTrancado() + ","
-                        + aluno.getCursoTrancado());
+                        + aluno.getCursoTrancado() + ","
+                        + preRequisitosStr);
                 writer.newLine();
             }
 
@@ -186,18 +226,32 @@ public class AlunoManager {
             String linha;
             reader.readLine(); // Ignora o cabeçalho
             while ((linha = reader.readLine()) != null) {
-                String[] dados = linha.split(",");
-                if (dados.length == 6) {
+                String[] dados = linha.split(",",-1);
+                if (dados.length == 8) {
                     String nome = dados[0].trim();
                     int matricula = Integer.parseInt(dados[1].trim());
                     String curso = dados[2].trim();
                     boolean especial = Boolean.parseBoolean(dados[3].trim());
-                    boolean semestreTrancado = Boolean.parseBoolean(dados[4].trim());
-                    boolean cursoTrancado = Boolean.parseBoolean(dados[5].trim());
+                    int materias = Integer.parseInt(dados[4].trim());
+                    boolean semestreTrancado = Boolean.parseBoolean(dados[5].trim());
+                    boolean cursoTrancado = Boolean.parseBoolean(dados[6].trim());
 
-                    Aluno aluno = new Aluno(nome, matricula, curso, especial, semestreTrancado, cursoTrancado);
-                    alunos.add(aluno); // Adiciona o aluno à lista
+                    Aluno aluno;
+                    if (especial) {
+                        aluno = new AlunoEspecial(nome, matricula, curso, especial, cursoTrancado, semestreTrancado);
+                    } else {
+                        aluno = new Aluno(nome, matricula, curso, especial, cursoTrancado, semestreTrancado);
+                    }
 
+                    if (dados.length > 7 && !dados[7].isEmpty()) {
+                        String[] preReqs = dados[7].split(";");
+                        for (String preRequisitos : preReqs) {
+                            aluno.getPreRequisito().add(preRequisitos.trim());
+                        }
+                    }
+                    aluno.setMateria(materias);
+
+                    alunos.add(aluno);
                 }
             }
         } catch (IOException e) {
@@ -272,10 +326,10 @@ public class AlunoManager {
 
         for (Aluno aluno : alunos) {
             if (aluno.getMatricula().equals(matricula)) {
-                return aluno; // Retorna o aluno encontrado
+                return aluno;
             }
         }
-        return null; // Retorna null se o aluno não for encontrado
+        return null;
     }
 
     public void removerAluno() {
@@ -314,13 +368,13 @@ public class AlunoManager {
             System.out.println("\nDigite a matrícula do aluno que deseja realizar a operação\n");
             try {
                 matricula = sc.nextInt();
-                sc.nextLine(); // Limpa o buffer
+                sc.nextLine();
                 entradaValida = true;
             } catch (InputMismatchException e) {
                 System.out.println("---------------------------------------");
                 System.out.println("Entrada inválida! Por favor, digite um número.");
                 System.out.println("---------------------------------------");
-                sc.nextLine(); // Limpa o buffer para evitar loop infinito
+                sc.nextLine();
             }
         }
 
@@ -336,14 +390,17 @@ public class AlunoManager {
     public void cadastrarAlunoNaTurma() {
         Aluno alunoParaCadastrar = retornaAluno();
 
+        System.out.println("\n" + alunoParaCadastrar.toString() + "\n");
+
         if (alunoParaCadastrar.getCursoTrancado() == true || alunoParaCadastrar.getSemestreTrancado() == true) {
             System.out.println("\nEsse aluno não pode se matricular, pois seu semestre ou curso está trancado\n");
             menu.menuAluno();
         }
 
         if (alunoParaCadastrar instanceof AlunoEspecial esp) {
-            if (esp.getMateria() > 2) {
+            if (esp.getMateria() >= 2) {
                 System.out.println("\nO aluno " + esp.getNome() + " já esta matricululado em duas matérias\n");
+                menu.menuAluno();
             }
         }
 
@@ -356,6 +413,18 @@ public class AlunoManager {
                 System.out.println("\nDisciplina não encontrada\n");
                 menu.menuAluno();
             }
+            boolean possuiPreRequisito = false;
+            for (String preRequisto : alunoParaCadastrar.getPreRequisito()) {
+                if (preRequisto.equalsIgnoreCase(disciplinaParaCadastrar.getPreRequisito())) {
+                    possuiPreRequisito = true;
+                    break;
+                }
+            }
+
+            if (!possuiPreRequisito) {
+                System.out.println("\nO aluno não possui o pré-requisito necessário para se matricular\n");
+                menu.menuAluno();
+            }
 
             List<Turma> turmas = disciplinaParaCadastrar.getTurmas();
             if (turmas.isEmpty()) {
@@ -363,7 +432,16 @@ public class AlunoManager {
                 menu.menuAluno();
             }
 
-            System.out.println("\nTurmas cadastrada na disciplina " + disciplinaParaCadastrar.getNome() + "\n");
+            for (Turma turma : turmas) {
+                for (Aluno aluno : turma.getListaAlunos()) {
+                    if (aluno.getMatricula().equals(alunoParaCadastrar.getMatricula())) {
+                        System.out.println("\nEsse aluno já está matriculado na disciplina.\n");
+                        menu.menuAluno();
+                    }
+                }
+            }
+
+            System.out.println("\nTurmas cadastradas na disciplina " + disciplinaParaCadastrar.getNome() + "\n");
 
             for (Turma turma : turmas) {
                 System.out.println("- Turma: " + turma.getNumeroDaTurma() + " | - Professor: " + turma.getProfessor()
@@ -385,8 +463,8 @@ public class AlunoManager {
                     turma.getListaAlunos().add(alunoParaCadastrar);
                     turma.setVagas(turma.getVagas() - 1);
                     alunoParaCadastrar.setMateria(alunoParaCadastrar.getMateria() + 1);
-
-                    System.out.println("\nAluno: " + alunoParaCadastrar.getNome() + " cadastradado em " + disciplinaParaCadastrar.getNome() + " na turma " + turma.getNumeroDaTurma() + "\n");
+                    System.out.println("Aluno " + alunoParaCadastrar.getNome() + " agora está em " + alunoParaCadastrar.getMateria() + " matérias.");
+                    System.out.println("\nAluno " + alunoParaCadastrar.getNome() + " cadastradado em " + disciplinaParaCadastrar.getNome() + " na turma " + turma.getNumeroDaTurma() + "\n");
                     menu.menuAluno();
                 }
             }
@@ -400,7 +478,7 @@ public class AlunoManager {
 
     public Aluno buscarAlunoPorNome(String nome) {
         for (Aluno aluno : alunos) {
-            if (aluno.getNome().equalsIgnoreCase(nome)) {
+            if (aluno.getNome().trim().equalsIgnoreCase(nome.trim())) {
                 return aluno;
             }
         }

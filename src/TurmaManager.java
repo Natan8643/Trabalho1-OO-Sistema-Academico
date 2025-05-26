@@ -38,6 +38,12 @@ public class TurmaManager {
             System.out.println("\nDigite o número da turma\n");
             int numeroDaTurma = sc.nextInt();
             sc.nextLine();
+            for (Turma turma : listaDeTurmas) {
+                if (turma.getNumeroDaTurma().equals(numeroDaTurma)) {
+                    System.out.println("\nUma turma já possui esse número\n");
+                    menu.menuDisciplina();
+                }
+            }
             System.out.println("\nDigite o nome do professor\n");
             String professor = sc.nextLine();
             System.out.println("\nDigite o semestre. Ex: 25.1\n");
@@ -85,6 +91,15 @@ public class TurmaManager {
 
             System.out.println("\nDigite o horário em horas. Ex: 10\n");
             int horario = sc.nextInt();
+
+            for (Turma turma : listaDeTurmas) {
+                if (turma.getSala().equals(sala)) {
+                    if (turma.getHorario().equals(horario)) {
+                    System.out.println("\nA sala " + sala + " já está ocupada no nesse horário: " + horario);
+                    menu.menuDisciplina();
+                }
+                }
+            }
 
             System.out.println("\nDigite a capacidade máxima:\n");
             int capacidadeMax = sc.nextInt();
@@ -141,7 +156,7 @@ public class TurmaManager {
 
     }
 
-    public void carregarDados() {
+    private void carregarDados() {
         if (!arquivo.exists()) {
             return;
         }
