@@ -11,25 +11,34 @@ import java.util.Scanner;
 
 public class AlunoManager {
 
-    private List<Aluno> alunos = new ArrayList<>();
-    private List<Aluno> alunoEsp = new ArrayList<>();
+    private List<Aluno> alunos;
+    private List<AlunoEspecial> alunoEsp;
     private Menu menu;
-    private final String nomeArquivo = "data/alunos.csv";
-    private final File arquivo = new File(nomeArquivo);
-    private final DisciplinaManager disciplinaManager;
+    private final String nomeArquivo;
+    private final File arquivo;
+    private DisciplinaManager disciplinaManager;
 
-    public void setMenu(Menu menu) {
+    public AlunoManager() {
+        this.alunos = new ArrayList<>();
+        this.alunoEsp = new ArrayList<>();
+        this.menu = null;
+        this.nomeArquivo = "data/alunos.csv";
+        this.arquivo = new File(nomeArquivo);
+        this.disciplinaManager = new DisciplinaManager();
+    }
+
+    public AlunoManager(Menu menu) {
+        this.alunos = new ArrayList<>();
         this.menu = menu;
+        this.nomeArquivo = "data/alunos.csv";
+        this.arquivo = new File(nomeArquivo);
+        carregarAlunos();
     }
 
     public List<Aluno> getListaAlunos() {
         return alunos;
     }
 
-    public AlunoManager(DisciplinaManager disciplinaManager) {
-        carregarAlunos(); // Carrega os dados automaticamente ao criar o objeto
-        this.disciplinaManager = disciplinaManager;
-    }
 
     public void cadastrarAluno() {
         System.out.println();

@@ -1,4 +1,3 @@
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -10,14 +9,26 @@ public class TurmaManager {
 
     private DisciplinaManager disciplinaManager;
     private Menu menu;
-    private final String nomeArquivo = "data/turma.csv";
-    private final File arquivo = new File(nomeArquivo);
+    private String nomeArquivo;
+    private File arquivo;
     private List<Turma> listaDeTurmas = new ArrayList<>();
-    private AlunoManager alunoManager = new AlunoManager(disciplinaManager);
+    private AlunoManager alunoManager;
 
-    public TurmaManager(DisciplinaManager disciplinaManager, Menu menu) {
+    public TurmaManager() {
+        this.listaDeTurmas = new ArrayList<>();
+        this.nomeArquivo = "data/turma.csv";
+        this.arquivo = new File(nomeArquivo);
+        this.disciplinaManager = null;
+        this.menu = null;
+        this.alunoManager = null;
+    }
+
+    public TurmaManager(DisciplinaManager disciplinaManager, AlunoManager alunoManager, Menu menu) {
         this.disciplinaManager = disciplinaManager;
+        this.alunoManager = alunoManager;
         this.menu = menu;
+        this.nomeArquivo = "data/turma.csv";
+        this.arquivo = new File(nomeArquivo);
         carregarDados();
     }
 
@@ -95,9 +106,9 @@ public class TurmaManager {
             for (Turma turma : listaDeTurmas) {
                 if (turma.getSala().equals(sala)) {
                     if (turma.getHorario().equals(horario)) {
-                    System.out.println("\nA sala " + sala + " já está ocupada no nesse horário: " + horario);
-                    menu.menuDisciplina();
-                }
+                        System.out.println("\nA sala " + sala + " já está ocupada no nesse horário: " + horario);
+                        menu.menuDisciplina();
+                    }
                 }
             }
 
@@ -144,7 +155,7 @@ public class TurmaManager {
                         + turma.getTipoDeAula() + ","
                         + turma.getAvaliacao() + ","
                         + turma.getCapacidadeMax() + ","
-                        + turma.getVagas() + "," 
+                        + turma.getVagas() + ","
                         + alunosStr.toString()
                 );
                 writer.newLine();

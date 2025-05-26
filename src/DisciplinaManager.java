@@ -1,4 +1,3 @@
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -12,17 +11,24 @@ import java.util.Scanner;
 
 public class DisciplinaManager {
 
-    private List<Disciplina> listaDisciplinas = new ArrayList<>();
-    private final String nomeArquivo = "data/disciplina.csv";
-    private final File arquivo = new File(nomeArquivo);
+    private List<Disciplina> listaDisciplinas;
+    private final String nomeArquivo;
+    private final File arquivo;
     private Menu menu;
 
     public DisciplinaManager() {
-        carregarDados();
+        this.listaDisciplinas = new ArrayList<>();
+        this.nomeArquivo = "data/disciplina.csv";
+        this.arquivo = new File(nomeArquivo);
+        this.menu = null;
     }
-
-    public void setMenu(Menu menu) {
+    
+    public DisciplinaManager(Menu menu) {
+        this.listaDisciplinas = new ArrayList<>();
+        this.nomeArquivo = "data/disciplina.csv";
+        this.arquivo = new File(nomeArquivo);
         this.menu = menu;
+        carregarDados();
     }
 
     public List<Disciplina> getListaDisciplinas() {

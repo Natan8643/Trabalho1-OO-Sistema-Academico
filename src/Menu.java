@@ -4,14 +4,14 @@ import java.util.Scanner;
 
 public class Menu {
 
-    private final DisciplinaManager disciplinaManager = new DisciplinaManager();
-    private final AlunoManager alunoManager = new AlunoManager(disciplinaManager);
+    private DisciplinaManager disciplinaManager;
+    private final AlunoManager alunoManager;
     private final TurmaManager turmaManager;
 
     public Menu() {
-        alunoManager.setMenu(this);
-        disciplinaManager.setMenu(this);
-        turmaManager = new TurmaManager(disciplinaManager, this);
+        alunoManager = new AlunoManager(this);
+        disciplinaManager = new DisciplinaManager(this);
+        turmaManager = new TurmaManager(disciplinaManager,alunoManager, this);
     }
 
     public void encerrarPrograma() {
