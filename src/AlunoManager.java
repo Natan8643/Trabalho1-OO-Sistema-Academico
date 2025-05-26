@@ -331,7 +331,7 @@ public class AlunoManager {
         }
     }
 
-    private Aluno buscarAlunoPorMatricula(int matricula) {
+    public Aluno buscarAlunoPorMatricula(int matricula) {
 
         for (Aluno aluno : alunos) {
             if (aluno.getMatricula().equals(matricula)) {
