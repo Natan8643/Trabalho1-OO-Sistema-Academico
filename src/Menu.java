@@ -10,8 +10,8 @@ public class Menu {
     private AcompanhamentoManager acompanhamentoManager;
 
     public Menu() {
-        alunoManager = new AlunoManager(this);
         disciplinaManager = new DisciplinaManager(this);
+        alunoManager = new AlunoManager(disciplinaManager, this);
         turmaManager = new TurmaManager(disciplinaManager, alunoManager, this);
         acompanhamentoManager = new AcompanhamentoManager(alunoManager, disciplinaManager, this);
     }
@@ -139,6 +139,7 @@ public class Menu {
                         }
                         case 4 -> {
                             //listar turmas
+                            disciplinaManager.listarTurmas();
                         }
                         case 5 -> {
                             menuInicial();

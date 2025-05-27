@@ -24,14 +24,15 @@ public class AlunoManager {
         this.menu = null;
         this.nomeArquivo = "data/alunos.csv";
         this.arquivo = new File(nomeArquivo);
-        this.disciplinaManager = new DisciplinaManager();
     }
 
-    public AlunoManager(Menu menu) {
+    public AlunoManager(DisciplinaManager disciplinaManager ,Menu menu) {
         this.alunos = new ArrayList<>();
+        this.alunoEsp = new ArrayList<>(); 
         this.menu = menu;
         this.nomeArquivo = "data/alunos.csv";
         this.arquivo = new File(nomeArquivo);
+        this.disciplinaManager = disciplinaManager;
         carregarAlunos();
     }
 
@@ -469,15 +470,22 @@ public class AlunoManager {
 
             for (Turma turma : turmas) {
                 if (turma.getNumeroDaTurma().equals(escolha)) {
-                    turma.getListaAlunos().add(alunoParaCadastrar);
-                    turma.setVagas(turma.getVagas() - 1);
-                    alunoParaCadastrar.setMateria(alunoParaCadastrar.getMateria() + 1);
-                    System.out.println("Aluno " + alunoParaCadastrar.getNome() + " agora está em " + alunoParaCadastrar.getMateria() + " matérias.");
-                    System.out.println("\nAluno " + alunoParaCadastrar.getNome() + " cadastradado em " + disciplinaParaCadastrar.getNome() + " na turma " + turma.getNumeroDaTurma() + "\n");
-                    menu.menuAluno();
+                    if (turma.getVagas() >= 1) {
+                        turma.getListaAlunos().add(alunoParaCadastrar);
+                        turma.setVagas(turma.getVagas() - 1);
+                        alunoParaCadastrar.setMateria(alunoParaCadastrar.getMateria() + 1);
+                        System.out.println("Aluno " + alunoParaCadastrar.getNome() + " agora está em " + alunoParaCadastrar.getMateria() + " matérias.");
+                        System.out.println("\nAluno " + alunoParaCadastrar.getNome() + " cadastradado em " + disciplinaParaCadastrar.getNome() + " na turma " + turma.getNumeroDaTurma() + "\n");
+                    }
+                    
+                    else {
+                        System.out.println("\nA turma está cheia\n");
+                    }
+                    menu.menuAluno();                        
                 }
+                
             }
-
+            
             System.out.println("\nEssa turma não existe\n");
             menu.menuAluno();
 
