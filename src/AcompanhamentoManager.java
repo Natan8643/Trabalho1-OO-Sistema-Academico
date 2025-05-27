@@ -267,7 +267,7 @@ public class AcompanhamentoManager {
                 double mediaTurma = (totalAlunos > 0) ? Math.round((somaMedias / totalAlunos) * 100.0) / 100.0 : 0;
 
                 if (opcao == 1) {
-                    System.out.println("\nTurma: " + turma.getNumeroDaTurma() + " | Professor: " + turma.getProfessor() + " | Tipo de aula: " + turma.getTipoDeAula() + " | Carga horária: " + disciplina.getCargaHoraria() + " | Número de alunos: " + totalAlunos + " | Aprovados: " + aprovados + " | Média da turma: " + mediaTurma + "\n");
+                    System.out.println("\nTurma: " + turma.getNumeroDaTurma() + " | Professor: " + turma.getProfessor() + " | Tipo de aula: " + turma.getTipoDeAula() + " | Carga horária: " + disciplina.getCargaHoraria() + " | Número de alunos: " + numeroAlunos + " | Aprovados: " + aprovados + " | Média da turma: " + mediaTurma + "\n");
                 } else if (opcao == 2) {
                     System.out.println("\nTurma: " + turma.getNumeroDaTurma() + " | Número de alunos: " + numeroAlunos + " | Aprovados: " + aprovados + " | Média da turma: " + mediaTurma + "\n");
                 }
