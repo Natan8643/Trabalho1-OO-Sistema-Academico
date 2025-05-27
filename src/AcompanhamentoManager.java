@@ -1,3 +1,4 @@
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -75,9 +76,7 @@ public class AcompanhamentoManager {
                 presenca = sc.nextInt();
                 sc.nextLine();
                 aprovacao = presenca >= 75;
-            }
-
-            else{
+            } else {
                 System.out.println("\nDigite a nota da P1\n");
                 notaP1 = sc.nextDouble();
                 sc.nextLine();
@@ -98,9 +97,9 @@ public class AcompanhamentoManager {
                 sc.nextLine();
                 mediaFinal = calcularMediaFinal(turmaEncontrada, notaP1, notaP2, notaP3, seminario, listaDeExercicios);
                 aprovacao = aprovacao(presenca, mediaFinal);
-    
+
             }
-            
+
             Acompanhamento statusDoAluno = new Acompanhamento(aluno, disciplina, turmaEncontrada, notaP1, notaP2, notaP3, seminario, listaDeExercicios, presenca, mediaFinal, aprovacao);
             listaAcompanhamentos.add(statusDoAluno);
             System.out.println("\nNota lançada do aluno " + aluno.getNome() + " lançada com sucesso\n");
@@ -251,6 +250,7 @@ public class AcompanhamentoManager {
                 int aprovados = 0;
                 double totalAlunos = 0;
                 double somaMedias = 0;
+                int numeroAlunos = turma.getListaAlunos().size();
 
                 for (Acompanhamento acompanhamento : listaAcompanhamentos) {
                     if (acompanhamento.getTurma().equals(turma)) {
@@ -267,9 +267,9 @@ public class AcompanhamentoManager {
                 double mediaTurma = (totalAlunos > 0) ? Math.round((somaMedias / totalAlunos) * 100.0) / 100.0 : 0;
 
                 if (opcao == 1) {
-                    System.out.println("\nTurma: " + turma.getNumeroDaTurma() + " | Professor: " + turma.getProfessor() + " | Tipo de aula: " + turma.getTipoDeAula() + " | Carga horária: " + disciplina.getCargaHoraria() +  " | Aprovados: " + aprovados + " | Média da turma: " + mediaTurma + "\n");
+                    System.out.println("\nTurma: " + turma.getNumeroDaTurma() + " | Professor: " + turma.getProfessor() + " | Tipo de aula: " + turma.getTipoDeAula() + " | Carga horária: " + disciplina.getCargaHoraria() + " | Número de alunos: " + totalAlunos + " | Aprovados: " + aprovados + " | Média da turma: " + mediaTurma + "\n");
                 } else if (opcao == 2) {
-                    System.out.println("\nTurma: " + turma.getNumeroDaTurma() + " | Aprovados: " + aprovados + " | Média da turma: " + mediaTurma + "\n");
+                    System.out.println("\nTurma: " + turma.getNumeroDaTurma() + " | Número de alunos: " + numeroAlunos + " | Aprovados: " + aprovados + " | Média da turma: " + mediaTurma + "\n");
                 }
             }
 
@@ -288,12 +288,17 @@ public class AcompanhamentoManager {
             double totalAlunos = 0;
             double somaMedias = 0;
 
+            int numeroAlunos = 0;
+            for (Turma turma : disciplina.getTurmas()) {
+                numeroAlunos += turma.getListaAlunos().size();
+            }
+
             for (Acompanhamento acompanhamento : listaAcompanhamentos) {
                 if (acompanhamento.getDisciplina().equals(disciplina)) {
                     if (!(acompanhamento.getAluno() instanceof AlunoEspecial)) {
-                            somaMedias += acompanhamento.getMediaFinal();
-                            totalAlunos++;
-                        }
+                        somaMedias += acompanhamento.getMediaFinal();
+                        totalAlunos++;
+                    }
                     if (acompanhamento.getAprovacao()) {
                         aprovados++;
                     }
@@ -302,7 +307,7 @@ public class AcompanhamentoManager {
             }
 
             double mediaDisciplina = (totalAlunos > 0) ? Math.round((somaMedias / totalAlunos) * 100.0) / 100.0 : 0;
-            System.out.println("\nDisciplina: " + disciplina.getNome() + " | Aprovados: " + aprovados + " | Média da turma: " + mediaDisciplina + "\n");
+            System.out.println("\nDisciplina: " + disciplina.getNome() + " | Número de alunos: " + numeroAlunos + " | Aprovados: " + aprovados + " | Média da turma: " + mediaDisciplina + "\n");
 
             menu.menuAcompanhamento();
         }
@@ -317,14 +322,23 @@ public class AcompanhamentoManager {
             double totalAlunos = 0;
             double somaMedias = 0;
             boolean professorEncontrado = false;
+            int numeroAlunos = 0;
 
+            for (Disciplina disciplina : disciplinaManager.getListaDisciplinas()) {
+            for (Turma turma : disciplina.getTurmas()) {
+                if (turma.getProfessor().equalsIgnoreCase(professor)) {
+                    numeroAlunos += turma.getListaAlunos().size();
+                }
+            }
+        }
+            
             for (Acompanhamento acompanhamento : listaAcompanhamentos) {
                 if (acompanhamento.getTurma().getProfessor().equalsIgnoreCase(professor)) {
                     professorEncontrado = true;
                     if (!(acompanhamento.getAluno() instanceof AlunoEspecial)) {
-                            somaMedias += acompanhamento.getMediaFinal();
-                            totalAlunos++;
-                        }
+                        somaMedias += acompanhamento.getMediaFinal();
+                        totalAlunos++;
+                    }
                     if (acompanhamento.getAprovacao()) {
                         aprovados++;
                     }
@@ -337,7 +351,7 @@ public class AcompanhamentoManager {
             }
 
             double mediaDisciplina = (totalAlunos > 0) ? Math.round((somaMedias / totalAlunos) * 100.0) / 100.0 : 0;
-            System.out.println("\nProfessor: " + professor + " | Aprovados: " + aprovados + " | Média da turma: " + mediaDisciplina + "\n");
+            System.out.println("\nProfessor: " + professor + " | Número de alunos: " + numeroAlunos + " | Aprovados: " + aprovados + " | Média da turma: " + mediaDisciplina + "\n");
 
             menu.menuAcompanhamento();
         }
