@@ -1,4 +1,3 @@
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -67,30 +66,43 @@ public class AcompanhamentoManager {
             System.out.println("\nAluno: " + aluno.getNome() + " | Disciplina: " + disciplina.getNome() + " | Turma: " + turmaEncontrada.getNumeroDaTurma() + " | Avaliação: " + turmaEncontrada.getAvaliacao() + "\n\nDigite ENTER para continuar\n");
             sc.nextLine();
 
-            System.out.println("\nDigite a nota da P1\n");
-            double notaP1 = sc.nextDouble();
-            sc.nextLine();
-            System.out.println("\nDigite a nota da P2\n");
-            double notaP2 = sc.nextDouble();
-            sc.nextLine();
-            System.out.println("\nDigite a nota da P3\n");
-            double notaP3 = sc.nextDouble();
-            sc.nextLine();
-            System.out.println("\nDigite a nota do Seminário\n");
-            double seminario = sc.nextDouble();
-            sc.nextLine();
-            System.out.println("\nDigite a nota da Lista de Exercícios do aluno\n");
-            double listaDeExercicios = sc.nextDouble();
-            sc.nextLine();
-            System.out.println("\nDigite a presenca do aluno em porcentagem. Ex: 75\n");
-            int presenca = sc.nextInt();
-            sc.nextLine();
+            Double notaP1 = 0.0, notaP2 = 0.0, notaP3 = 0.0, seminario = 0.0, listaDeExercicios = 0.0, mediaFinal = 0.0;
+            int presenca = 0;
+            boolean aprovacao = false;
 
-            double mediaFinal = calcularMediaFinal(turmaEncontrada, notaP1, notaP2, notaP3, seminario, listaDeExercicios);
-            boolean aprovacao = aprovacao(presenca, mediaFinal);
+            if (aluno instanceof AlunoEspecial) {
+                System.out.println("\nDigite a presenca do aluno em porcentagem. Ex: 75\n");
+                presenca = sc.nextInt();
+                sc.nextLine();
+                aprovacao = presenca >= 75;
+            }
+
+            else{
+                System.out.println("\nDigite a nota da P1\n");
+                notaP1 = sc.nextDouble();
+                sc.nextLine();
+                System.out.println("\nDigite a nota da P2\n");
+                notaP2 = sc.nextDouble();
+                sc.nextLine();
+                System.out.println("\nDigite a nota da P3\n");
+                notaP3 = sc.nextDouble();
+                sc.nextLine();
+                System.out.println("\nDigite a nota do Seminário\n");
+                seminario = sc.nextDouble();
+                sc.nextLine();
+                System.out.println("\nDigite a nota da Lista de Exercícios do aluno\n");
+                listaDeExercicios = sc.nextDouble();
+                sc.nextLine();
+                System.out.println("\nDigite a presenca do aluno em porcentagem. Ex: 75\n");
+                presenca = sc.nextInt();
+                sc.nextLine();
+                mediaFinal = calcularMediaFinal(turmaEncontrada, notaP1, notaP2, notaP3, seminario, listaDeExercicios);
+                aprovacao = aprovacao(presenca, mediaFinal);
+    
+            }
+            
             Acompanhamento statusDoAluno = new Acompanhamento(aluno, disciplina, turmaEncontrada, notaP1, notaP2, notaP3, seminario, listaDeExercicios, presenca, mediaFinal, aprovacao);
             listaAcompanhamentos.add(statusDoAluno);
-
             System.out.println("\nNota lançada do aluno " + aluno.getNome() + " lançada com sucesso\n");
             menu.menuAcompanhamento();
         }
@@ -242,8 +254,10 @@ public class AcompanhamentoManager {
 
                 for (Acompanhamento acompanhamento : listaAcompanhamentos) {
                     if (acompanhamento.getTurma().equals(turma)) {
-                        somaMedias += acompanhamento.getMediaFinal();
-                        totalAlunos++;
+                        if (!(acompanhamento.getAluno() instanceof AlunoEspecial)) {
+                            somaMedias += acompanhamento.getMediaFinal();
+                            totalAlunos++;
+                        }
                         if (acompanhamento.getAprovacao()) {
                             aprovados++;
                         }
@@ -253,9 +267,8 @@ public class AcompanhamentoManager {
                 double mediaTurma = (totalAlunos > 0) ? Math.round((somaMedias / totalAlunos) * 100.0) / 100.0 : 0;
 
                 if (opcao == 1) {
-                    System.out.println("\nTurma: " + turma.getNumeroDaTurma() + " | Professor: "+ turma.getProfessor() + " | Tipo de aula: " + turma.getTipoDeAula() + " | Aprovados: " + aprovados + " | Média da turma: " + mediaTurma + "\n");
-                }
-                else if (opcao == 2) {
+                    System.out.println("\nTurma: " + turma.getNumeroDaTurma() + " | Professor: " + turma.getProfessor() + " | Tipo de aula: " + turma.getTipoDeAula() + " | Carga horária: " + disciplina.getCargaHoraria() +  " | Aprovados: " + aprovados + " | Média da turma: " + mediaTurma + "\n");
+                } else if (opcao == 2) {
                     System.out.println("\nTurma: " + turma.getNumeroDaTurma() + " | Aprovados: " + aprovados + " | Média da turma: " + mediaTurma + "\n");
                 }
             }
@@ -277,8 +290,10 @@ public class AcompanhamentoManager {
 
             for (Acompanhamento acompanhamento : listaAcompanhamentos) {
                 if (acompanhamento.getDisciplina().equals(disciplina)) {
-                    somaMedias += acompanhamento.getMediaFinal();
-                    totalAlunos++;
+                    if (!(acompanhamento.getAluno() instanceof AlunoEspecial)) {
+                            somaMedias += acompanhamento.getMediaFinal();
+                            totalAlunos++;
+                        }
                     if (acompanhamento.getAprovacao()) {
                         aprovados++;
                     }
@@ -306,8 +321,10 @@ public class AcompanhamentoManager {
             for (Acompanhamento acompanhamento : listaAcompanhamentos) {
                 if (acompanhamento.getTurma().getProfessor().equalsIgnoreCase(professor)) {
                     professorEncontrado = true;
-                    somaMedias += acompanhamento.getMediaFinal();
-                    totalAlunos++;
+                    if (!(acompanhamento.getAluno() instanceof AlunoEspecial)) {
+                            somaMedias += acompanhamento.getMediaFinal();
+                            totalAlunos++;
+                        }
                     if (acompanhamento.getAprovacao()) {
                         aprovados++;
                     }
