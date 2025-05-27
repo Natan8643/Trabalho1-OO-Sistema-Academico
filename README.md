@@ -100,13 +100,13 @@ Após a compilação, execute o programa principal (por exemplo, `App.java`) com
 
 ## Prints da Execução
 
-1. Menu Principal:  
+1. Listagem de turmas:  
    ![Print 1](media/Captura%20de%20tela%202025-05-26%20230035.png)
 
-2. Cadastro de Aluno:  
+2. Relatório por professor:  
    ![Print 2](media/Captura%20de%20tela%202025-05-26%20231828.png)
 
-3. Relatório de Frequência/Notas:  
+3. Listagem de alunos:  
    ![Print 3](media/Captura%20de%20tela%202025-05-26%20232227.png)
 
 ---
