@@ -194,7 +194,7 @@ public class DisciplinaManager {
                         + " | Número de vagas: " + turma.getVagas() + "\n");
 
             }
-            menu.menuAluno();
+            menu.menuDisciplina();
         }
     }
 
