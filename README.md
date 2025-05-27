@@ -94,7 +94,7 @@ Após a compilação, execute o programa principal (por exemplo, `App.java`) com
 ## Vídeo de Demonstração
 
 - O vídeo de demonstração está disponível na pasta `media` do projeto.
-- Para assistir, abra o arquivo `media/video-demo.mp4` (ou o nome do seu vídeo) com seu player de vídeo favorito.
+- Para assistir, abra o arquivo `media/video.mp4` com seu player de vídeo favorito.
 
 ---
 
